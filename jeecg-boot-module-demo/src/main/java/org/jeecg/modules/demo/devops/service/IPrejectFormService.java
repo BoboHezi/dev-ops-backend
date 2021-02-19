@@ -2,6 +2,7 @@ package org.jeecg.modules.demo.devops.service;
 
 import org.jeecg.modules.demo.devops.entity.PrejectForm;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.jeecg.modules.demo.devops.entity.respose.Messages;
 
 /**
  * @Description: 项目表单
@@ -11,4 +12,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IPrejectFormService extends IService<PrejectForm> {
 
+    Messages<?> handleBuild(PrejectForm prejectForm);
 }

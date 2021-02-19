@@ -2,4 +2,10 @@ spring:
   application:
     name: jeecg-system
   profiles:
-    active: @profile.name@
+    active: dev
+
+config:
+  jenkins_username: imp
+  jenkins_username_pwd: admin
+  jenkins_token: 11015bd4aae648bc92dd9b50e00881e0ff
+  jenkins_url: http://192.168.1.23:8090/

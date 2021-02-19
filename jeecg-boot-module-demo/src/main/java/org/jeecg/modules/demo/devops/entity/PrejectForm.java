@@ -85,4 +85,23 @@ public class PrejectForm implements Serializable {
 	@Excel(name = "任务状态", width = 15)
     @ApiModelProperty(value = "任务状态")
     private java.lang.String projectStatus;
+
+    @Override
+    public String toString() {
+        return "PrejectForm{" +
+                "id='" + id + '\'' +
+                ", createBy='" + createBy + '\'' +
+                ", createTime=" + createTime +
+                ", updateBy='" + updateBy + '\'' +
+                ", updateTime=" + updateTime +
+                ", sysOrgCode='" + sysOrgCode + '\'' +
+                ", projectPlatform='" + projectPlatform + '\'' +
+                ", projectName='" + projectName + '\'' +
+                ", serverIpaddress='" + serverIpaddress + '\'' +
+                ", projectVariant='" + projectVariant + '\'' +
+                ", projectBuildSign='" + projectBuildSign + '\'' +
+                ", projectBuildAction='" + projectBuildAction + '\'' +
+                ", projectStatus='" + projectStatus + '\'' +
+                '}';
+    }
 }
