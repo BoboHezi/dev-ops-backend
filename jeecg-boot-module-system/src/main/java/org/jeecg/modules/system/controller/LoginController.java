@@ -72,6 +72,7 @@ public class LoginController {
 		//password = AesEncryptUtil.desEncrypt(sysLoginModel.getPassword().replaceAll("%2B", "\\+")).trim();//密码解密
 		//update-begin--Author:scott  Date:20190805 for：暂时注释掉密码加密逻辑，有点问题
 
+		/*/ remove 校验验证码
 		//update-begin-author:taoyan date:20190828 for:校验验证码
         String captcha = sysLoginModel.getCaptcha();
         if(captcha==null){
@@ -87,6 +88,7 @@ public class LoginController {
 			return result;
 		}
 		//update-end-author:taoyan date:20190828 for:校验验证码
+		//*/
 		
 		//1. 校验用户是否有效
 		//update-begin-author:wangshuai date:20200601 for: 登录代码验证用户是否注销bug，if条件永远为false
