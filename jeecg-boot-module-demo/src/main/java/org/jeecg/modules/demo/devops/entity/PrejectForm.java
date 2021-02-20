@@ -85,7 +85,19 @@ public class PrejectForm implements Serializable {
 	@Excel(name = "任务状态", width = 15)
     @ApiModelProperty(value = "任务状态")
     private java.lang.String projectStatus;
-
+	/**项目路径*/
+	@Excel(name = "项目路径", width = 15)
+    @ApiModelProperty(value = "项目路径")
+    private java.lang.String projectDir;
+	/**服务器主机名*/
+	@Excel(name = "服务器主机名", width = 15)
+    @ApiModelProperty(value = "服务器主机名")
+    private java.lang.String serverHost;
+	/**服务器密码*/
+	@Excel(name = "服务器密码", width = 15)
+    @ApiModelProperty(value = "服务器密码")
+    private java.lang.String serverPassword;
+	
     @Override
     public String toString() {
         return "PrejectForm{" +
@@ -102,6 +114,9 @@ public class PrejectForm implements Serializable {
                 ", projectBuildSign='" + projectBuildSign + '\'' +
                 ", projectBuildAction='" + projectBuildAction + '\'' +
                 ", projectStatus='" + projectStatus + '\'' +
+                ", projectDir='" + projectDir + '\'' +
+                ", serverHost='" + serverHost + '\'' +
+                ", serverPassword='" + serverPassword + '\'' +
                 '}';
     }
 }

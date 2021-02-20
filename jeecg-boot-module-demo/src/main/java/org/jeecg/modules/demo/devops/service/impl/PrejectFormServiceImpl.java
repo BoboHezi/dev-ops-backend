@@ -40,9 +40,9 @@ public class PrejectFormServiceImpl extends ServiceImpl<PrejectFormMapper, Preje
             String curlurl = Config.JENKINS_BASE_URL
                     + "job/build_71p/buildWithParameters?project_name=" + prejectForm.getProjectName()
                     + "&server_ipaddress=" + prejectForm.getServerIpaddress()
-                    + "&server_hostname=server"
-                    + "&server_passwd=tyd1111"
-                    + "&project_dir=/data/71p"
+                    + "&server_hostname=" + prejectForm.getServerHost()
+                    + "&server_passwd=" + prejectForm.getServerPassword()
+                    + "&project_dir=" + prejectForm.getProjectDir()
                     + "&repo_url=android-28/ALPS-P0-MP1-6762/freeme-9.1.0_prod-xt6771.xml"
                     + "&build_variant=" + prejectForm.getProjectVariant()
                     + "&build_type=" + prejectForm.getProjectBuildSign()
