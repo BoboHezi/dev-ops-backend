@@ -43,6 +43,11 @@
 			<artifactId>jeecg-boot-module-demo</artifactId>
 			<version>${jeecgboot.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.jeecgframework.boot</groupId>
+			<artifactId>jeecg-boot-module-devops</artifactId>
+			<version>${jeecgboot.version}</version>
+		</dependency>
 		<!-- 积木报表 -->
 		<dependency>
 			<groupId>com.jimureport</groupId>
