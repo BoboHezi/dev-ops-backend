@@ -63,7 +63,8 @@ public class DevopsProject implements Serializable {
     @ApiModelProperty(value = "描述")
     private java.lang.String projectDesc;
 	/**平台*/
-	@Excel(name = "平台", width = 15)
+	@Excel(name = "平台",  width = 15, dictTable = "devops_code", dicText = "code_name", dicCode = "id")
+    @Dict(dictTable = "devops_code", dicText = "code_name", dicCode = "id")
     @ApiModelProperty(value = "平台")
     private java.lang.String projectCodeId;
 	/**项目版本号*/

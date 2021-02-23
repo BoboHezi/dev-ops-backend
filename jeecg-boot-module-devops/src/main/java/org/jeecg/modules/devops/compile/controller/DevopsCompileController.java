@@ -20,6 +20,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 
+import org.jeecg.modules.devops.entity.Messages;
 import org.jeecgframework.poi.excel.ExcelImportUtil;
 import org.jeecgframework.poi.excel.def.NormalExcelConstants;
 import org.jeecgframework.poi.excel.entity.ExportParams;
@@ -167,5 +168,27 @@ public class DevopsCompileController extends JeecgController<DevopsCompile, IDev
     public Result<?> importExcel(HttpServletRequest request, HttpServletResponse response) {
         return super.importExcel(request, response, DevopsCompile.class);
     }
+
+	 /**
+	  * 同步代码 autoCompile
+	  *
+	  * @param
+	  * @return
+	  */
+	 @AutoLog(value = "编译任务-自动编译")
+	 @ApiOperation(value = "编译任务-自动编译", notes = "编译任务-自动编译")
+	 @PostMapping(value = "/autoCompile")
+	 public Messages<?> autoCompile(HttpServletRequest request, @RequestBody DevopsCompile devopsCompile) {
+		 System.out.println("auto compile ... ");
+
+		 Messages<?> messages;
+		 try {
+			 messages = this.devopsCompileService.autoCompile(devopsCompile);
+		 } catch (Exception e) {
+			 e.printStackTrace();
+			 messages = Messages.Error(e.getMessage());
+		 }
+		 return messages;
+	 }
 
 }

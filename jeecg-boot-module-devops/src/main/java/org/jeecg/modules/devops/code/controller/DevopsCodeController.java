@@ -20,6 +20,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 
+import org.jeecg.modules.devops.entity.Messages;
 import org.jeecgframework.poi.excel.ExcelImportUtil;
 import org.jeecgframework.poi.excel.def.NormalExcelConstants;
 import org.jeecgframework.poi.excel.entity.ExportParams;
@@ -167,5 +168,27 @@ public class DevopsCodeController extends JeecgController<DevopsCode, IDevopsCod
     public Result<?> importExcel(HttpServletRequest request, HttpServletResponse response) {
         return super.importExcel(request, response, DevopsCode.class);
     }
+
+	 /**
+	  * 同步代码 devopsCode
+	  *
+	  * @param
+	  * @return
+	  */
+	 @AutoLog(value = "源代码管理-同步代码")
+	 @ApiOperation(value = "源代码管理-同步代码", notes = "源代码管理-同步代码")
+	 @PostMapping(value = "/syncCode")
+	 public Messages<?> syncCode(HttpServletRequest request, @RequestBody DevopsCode devopsCode) {
+		 System.out.println("sync code ... ");
+
+		 Messages<?> messages;
+		 try {
+			 messages = this.devopsCodeService.syncCode(devopsCode);
+		 } catch (Exception e) {
+			 e.printStackTrace();
+			 messages = Messages.Error(e.getMessage());
+		 }
+		 return messages;
+	 }
 
 }

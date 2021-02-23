@@ -70,6 +70,10 @@ public class DevopsCompile implements Serializable {
 	@Excel(name = "项目，平台，版本号", width = 15)
     @ApiModelProperty(value = "项目，平台，版本号")
     private java.lang.String compileProjectId;
+	/**编译服务器ip*/
+	@Excel(name = "编译服务器ip", width = 15)
+    @ApiModelProperty(value = "编译服务器ip")
+    private java.lang.String compileServerIp;
 	/**版本类型*/
 	@Excel(name = "版本类型", width = 15)
     @ApiModelProperty(value = "版本类型")
@@ -81,11 +85,11 @@ public class DevopsCompile implements Serializable {
 	/**是否签名*/
 	@Excel(name = "是否签名", width = 15)
     @ApiModelProperty(value = "是否签名")
-    private java.lang.Integer compileIsSign;
+    private java.lang.String compileIsSign;
 	/**是否验收*/
 	@Excel(name = "是否验收", width = 15)
     @ApiModelProperty(value = "是否验收")
-    private java.lang.Integer compileIsVerify;
+    private java.lang.String compileIsVerify;
 	/**任务状态*/
 	@Excel(name = "任务状态", width = 15)
     @ApiModelProperty(value = "任务状态")
@@ -108,4 +112,5 @@ public class DevopsCompile implements Serializable {
 	@Excel(name = "job_id", width = 15)
     @ApiModelProperty(value = "job_id")
     private java.lang.String compileJenkinsJobId;
+	
 }

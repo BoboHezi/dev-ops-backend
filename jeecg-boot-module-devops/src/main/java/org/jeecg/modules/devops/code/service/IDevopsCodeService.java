@@ -2,6 +2,7 @@ package org.jeecg.modules.devops.code.service;
 
 import org.jeecg.modules.devops.code.entity.DevopsCode;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.jeecg.modules.devops.entity.Messages;
 
 /**
  * @Description: 源代码管理
@@ -11,4 +12,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IDevopsCodeService extends IService<DevopsCode> {
 
+    Messages<?> syncCode(DevopsCode devopsCode);
 }
