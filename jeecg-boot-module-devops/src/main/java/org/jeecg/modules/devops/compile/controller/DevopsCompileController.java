@@ -170,7 +170,7 @@ public class DevopsCompileController extends JeecgController<DevopsCompile, IDev
     }
 
 	 /**
-	  * 同步代码 autoCompile
+	  * 自动编译 autoCompile
 	  *
 	  * @param
 	  * @return
@@ -184,6 +184,28 @@ public class DevopsCompileController extends JeecgController<DevopsCompile, IDev
 		 Messages<?> messages;
 		 try {
 			 messages = this.devopsCompileService.autoCompile(devopsCompile);
+		 } catch (Exception e) {
+			 e.printStackTrace();
+			 messages = Messages.Error(e.getMessage());
+		 }
+		 return messages;
+	 }
+
+	 /**
+	  * 自动编译 autoCompile
+	  *
+	  * @param
+	  * @return
+	  */
+	 @AutoLog(value = "编译任务-自动编译")
+	 @ApiOperation(value = "编译任务-自动编译", notes = "编译任务-自动编译")
+	 @PostMapping(value = "/stopCompile")
+	 public Messages<?> stopCompile(HttpServletRequest request, @RequestBody DevopsCompile devopsCompile) {
+		 System.out.println("stop compile ... ");
+
+		 Messages<?> messages;
+		 try {
+			 messages = this.devopsCompileService.stopCompile(devopsCompile);
 		 } catch (Exception e) {
 			 e.printStackTrace();
 			 messages = Messages.Error(e.getMessage());

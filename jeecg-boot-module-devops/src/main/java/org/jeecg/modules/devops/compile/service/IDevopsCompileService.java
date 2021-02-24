@@ -11,5 +11,8 @@ import org.jeecg.modules.devops.entity.Messages;
  * @Version: V1.0
  */
 public interface IDevopsCompileService extends IService<DevopsCompile> {
+
     Messages<?> autoCompile(DevopsCompile devopsCompile);
+
+    Messages<?> stopCompile(DevopsCompile devopsCompile);
 }
