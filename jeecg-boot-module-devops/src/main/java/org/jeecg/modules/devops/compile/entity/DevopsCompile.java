@@ -66,9 +66,13 @@ public class DevopsCompile implements Serializable {
 	@Excel(name = "描述", width = 15)
     @ApiModelProperty(value = "描述")
     private java.lang.String compileDesc;
-	/**项目，平台，版本号*/
-	@Excel(name = "项目，平台，版本号", width = 15)
-    @ApiModelProperty(value = "项目，平台，版本号")
+    /**平台*/
+    @Excel(name = "平台", width = 15)
+    @ApiModelProperty(value = "平台")
+    private java.lang.String compilePlatformId;
+	/**项目，版本号*/
+	@Excel(name = "项目，版本号", width = 15)
+    @ApiModelProperty(value = "项目，版本号")
     private java.lang.String compileProjectId;
 	/**编译服务器ip*/
 	@Excel(name = "编译服务器ip", width = 15)

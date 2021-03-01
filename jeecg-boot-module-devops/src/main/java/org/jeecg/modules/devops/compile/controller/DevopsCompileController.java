@@ -21,6 +21,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 
 import org.jeecg.modules.devops.entity.Messages;
+import org.jeecg.modules.devops.project.entity.DevopsProject;
+import org.jeecg.modules.devops.project.service.IDevopsProjectService;
 import org.jeecgframework.poi.excel.ExcelImportUtil;
 import org.jeecgframework.poi.excel.def.NormalExcelConstants;
 import org.jeecgframework.poi.excel.entity.ExportParams;
@@ -192,13 +194,13 @@ public class DevopsCompileController extends JeecgController<DevopsCompile, IDev
 	 }
 
 	 /**
-	  * 自动编译 autoCompile
+	  * 停止编译 stopCompile
 	  *
 	  * @param
 	  * @return
 	  */
-	 @AutoLog(value = "编译任务-自动编译")
-	 @ApiOperation(value = "编译任务-自动编译", notes = "编译任务-自动编译")
+	 @AutoLog(value = "编译任务-停止编译")
+	 @ApiOperation(value = "编译任务-停止编译", notes = "编译任务-停止编译")
 	 @PostMapping(value = "/stopCompile")
 	 public Messages<?> stopCompile(HttpServletRequest request, @RequestBody DevopsCompile devopsCompile) {
 		 System.out.println("stop compile ... ");
@@ -212,5 +214,13 @@ public class DevopsCompileController extends JeecgController<DevopsCompile, IDev
 		 }
 		 return messages;
 	 }
+
+//	 @GetMapping("/queryPlatform")
+//	 public Result<?> queryPlatform(){
+//	 	QueryWrapper<DevopsProject> queryWrapper = new QueryWrapper();
+//	 	queryWrapper.eq("dd",0).equals("dd");
+//4	 	List<DevopsProject> list = IDevopsProjectService.list(queryWrapper);
+//	 	return Result.ok(list);
+//	 }
 
 }
