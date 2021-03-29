@@ -31,90 +31,103 @@ import lombok.experimental.Accessors;
 public class DevopsCompile implements Serializable {
     private static final long serialVersionUID = 1L;
 
-	/**主键*/
-	@TableId(type = IdType.ASSIGN_ID)
+    /**主键*/
+    @TableId(type = IdType.ASSIGN_ID)
     @ApiModelProperty(value = "主键")
     private java.lang.String id;
-	/**创建人*/
+    /**创建人*/
     @ApiModelProperty(value = "创建人")
     private java.lang.String createBy;
-	/**创建日期*/
-	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
+    /**创建日期*/
+    @JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     @ApiModelProperty(value = "创建日期")
     private java.util.Date createTime;
-	/**更新人*/
+    /**更新人*/
     @ApiModelProperty(value = "更新人")
     private java.lang.String updateBy;
-	/**更新日期*/
-	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
+    /**更新日期*/
+    @JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     @ApiModelProperty(value = "更新日期")
     private java.util.Date updateTime;
-	/**所属部门*/
+    /**所属部门*/
     @ApiModelProperty(value = "所属部门")
     private java.lang.String sysOrgCode;
-	/**名称*/
-	@Excel(name = "名称", width = 15)
+    /**名称*/
+    @Excel(name = "名称", width = 15)
     @ApiModelProperty(value = "名称")
     private java.lang.String compileName;
-	/**任务ID*/
-	@Excel(name = "任务ID", width = 15)
+    /**任务ID*/
+    @Excel(name = "任务ID", width = 15)
     @ApiModelProperty(value = "任务ID")
     private java.lang.Integer compileBuildId;
-	/**描述*/
-	@Excel(name = "描述", width = 15)
+    /**描述*/
+    @Excel(name = "描述", width = 15)
     @ApiModelProperty(value = "描述")
     private java.lang.String compileDesc;
     /**平台*/
     @Excel(name = "平台", width = 15)
     @ApiModelProperty(value = "平台")
     private java.lang.String compilePlatformId;
-	/**项目，版本号*/
-	@Excel(name = "项目，版本号", width = 15)
+    /**新项目名*/
+    @Excel(name = "新项目名", width = 15)
+    @ApiModelProperty(value = "新项目名")
+    private java.lang.String newCompileProject;
+    /**项目，版本号*/
+    @Excel(name = "项目，版本号", width = 15)
     @ApiModelProperty(value = "项目，版本号")
     private java.lang.String compileProjectId;
-	/**编译服务器ip*/
-	@Excel(name = "编译服务器ip", width = 15)
+    /**编译服务器ip*/
+    @Excel(name = "编译服务器ip", width = 15)
     @ApiModelProperty(value = "编译服务器ip")
     private java.lang.String compileServerIp;
-	/**版本类型*/
-	@Excel(name = "版本类型", width = 15)
+    /**版本类型*/
+    @Excel(name = "版本类型", width = 15)
     @ApiModelProperty(value = "版本类型")
     private java.lang.String compileVariant;
-	/**编译动作*/
-	@Excel(name = "编译动作", width = 15)
+    /**编译动作*/
+    @Excel(name = "编译动作", width = 15)
     @ApiModelProperty(value = "编译动作")
     private java.lang.String compileAction;
-	/**是否签名*/
-	@Excel(name = "是否签名", width = 15)
+    /**是否签名*/
+    @Excel(name = "是否签名", width = 15)
     @ApiModelProperty(value = "是否签名")
     private java.lang.String compileIsSign;
-	/**是否验收*/
-	@Excel(name = "是否验收", width = 15)
+    /**是否验收*/
+    @Excel(name = "是否验收", width = 15)
     @ApiModelProperty(value = "是否验收")
     private java.lang.String compileIsVerify;
-	/**任务状态*/
-	@Excel(name = "任务状态", width = 15)
+    /**任务状态*/
+    @Excel(name = "任务状态", width = 15)
     @ApiModelProperty(value = "任务状态")
     private java.lang.Integer compileStatus;
-	/**编译日志*/
-	@Excel(name = "编译日志", width = 15)
+    /**编译日志*/
+    @Excel(name = "编译日志", width = 15)
     @ApiModelProperty(value = "编译日志")
     private java.lang.String compileLogUrl;
-	/**邮箱通知抄送*/
-	@Excel(name = "邮箱通知抄送", width = 15)
+    /**邮箱通知抄送*/
+    @Excel(name = "邮箱通知抄送", width = 15)
     @ApiModelProperty(value = "邮箱通知抄送")
     private java.lang.String compileSendEmail;
-	/**编译开始时间*/
-	@Excel(name = "编译开始时间", width = 15, format = "yyyy-MM-dd")
-	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd")
-    @DateTimeFormat(pattern="yyyy-MM-dd")
+    /**编译开始时间*/
+    @Excel(name = "编译开始时间", width = 15, format = "yyyy-MM-dd HH:mm")
+    @JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm")
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm")
     @ApiModelProperty(value = "编译开始时间")
     private java.util.Date compileBuildTime;
-	/**job_id*/
-	@Excel(name = "job_id", width = 15)
+    /**编译结束时间*/
+    @Excel(name = "编译结束时间", width = 15, format = "yyyy-MM-dd HH:mm")
+    @JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm")
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm")
+    @ApiModelProperty(value = "编译结束时间")
+    private java.util.Date compileBuildFinishTime;
+    /**job_name*/
+    @Excel(name = "job_name", width = 15)
+    @ApiModelProperty(value = "job_name")
+    private java.lang.String compileJenkinsJobName;
+    /**job_id*/
+    @Excel(name = "job_id", width = 15)
     @ApiModelProperty(value = "job_id")
     private java.lang.String compileJenkinsJobId;
-	
 }

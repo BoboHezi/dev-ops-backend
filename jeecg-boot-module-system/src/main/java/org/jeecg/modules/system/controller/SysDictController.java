@@ -149,9 +149,15 @@ public class SysDictController {
 				//字典表
 				 ls = sysDictService.queryDictItemsByCode(dictCode);
 			}
-
+			//去重
+			List<DictModel> ls1 = new LinkedList<>();
+			for(int i =0 ;i<ls.size();i++){
+				if(!ls1.contains(ls.get(i))){
+					ls1.add(ls.get(i));
+				}
+			}
 			 result.setSuccess(true);
-			 result.setResult(ls);
+			 result.setResult(ls1);
 			 log.debug(result.toString());
 		} catch (Exception e) {
 			log.error(e.getMessage(),e);

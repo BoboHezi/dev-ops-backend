@@ -5,7 +5,7 @@ spring:
     active: dev
 
 config:
-  jenkins_username: imp
+  jenkins_username: admin
   jenkins_username_pwd: admin
-  jenkins_token: 11015bd4aae648bc92dd9b50e00881e0ff
-  jenkins_url: http://192.168.1.23:8090/
+  jenkins_token: 11396481296612726c41b2c9dcacc19688
+  jenkins_url: 192.168.151.14:8080/

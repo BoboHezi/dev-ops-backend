@@ -1,5 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.jeecg.modules.devops.compile.mapper.DevopsCompileMapper">
+    <!-- 根据状态查询服务器含有当前项目 -->
+    <select id="queryServerStatus" parameterType="String" resultType="org.jeecg.modules.devops.server.entity.DevopsServer">
+        SELECT a.* FROM devops_server a inner join
+        devops_code b on a.id = b.code_server_id and
+        a.server_status = #{serverStatus}
+        and b.code_name = #{platform}
+        and b.code_status = #{codeStatus};
+    </select>
 
+    <!-- 根据状态查询地址 -->
+    <select id="queryCodeDir" parameterType="String" resultType="org.jeecg.modules.devops.code.entity.DevopsCode">
+        SELECT * FROM devops_code
+        WHERE code_server_id = #{serverId} and
+        code_name = #{platform};
+    </select>
 </mapper>

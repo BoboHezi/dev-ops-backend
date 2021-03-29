@@ -28,6 +28,7 @@ public class Resoure {
         public final static int DATA_TOKEN_INVALID = 10017;
         public final static int SYSTEM_ERROR = 10018;
         public final static int DATA_LOSER_RASON = 10019;
+        public final static int UNFOUND_CODE = 10020;
     }
 
     public static class Message {
@@ -55,7 +56,7 @@ public class Resoure {
             map.put(Code.DATA_TOKEN_INVALID, "token invalid");
             map.put(Code.SYSTEM_ERROR, "系统异常，请稍后重试");
             map.put(Code.DATA_LOSER_RASON, "验收不通过原因不能为空");
-
+            map.put(Code.UNFOUND_CODE,"未找到空闲的服务器,请求同步代码");
         }
 
         public static String get(int code) {

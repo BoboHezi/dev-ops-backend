@@ -215,12 +215,26 @@ public class DevopsCompileController extends JeecgController<DevopsCompile, IDev
 		 return messages;
 	 }
 
-//	 @GetMapping("/queryPlatform")
-//	 public Result<?> queryPlatform(){
-//	 	QueryWrapper<DevopsProject> queryWrapper = new QueryWrapper();
-//	 	queryWrapper.eq("dd",0).equals("dd");
-//4	 	List<DevopsProject> list = IDevopsProjectService.list(queryWrapper);
-//	 	return Result.ok(list);
-//	 }
+	 /**
+	  * 查看LOG checkLog
+	  *
+	  * @param
+	  * @return
+	  */
+	 @AutoLog(value = "编译任务-查看LOG")
+	 @ApiOperation(value = "编译任务-查看LOG", notes = "编译任务-查看LOG")
+	 @PostMapping(value = "/checkLog")
+	 public Messages<?> checkLog(HttpServletRequest request, @RequestBody DevopsCompile devopsCompile) {
+		 System.out.println("checkLog ... ");
 
-}
+		 Messages<?> messages;
+		 try {
+			 messages = this.devopsCompileService.checkLog(devopsCompile);
+		 } catch (Exception e) {
+			 e.printStackTrace();
+			 messages = Messages.Error(e.getMessage());
+		 }
+		 return messages;
+	 }
+
+ }

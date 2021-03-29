@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.jeecg.modules.devops.server.mapper.DevopsServerMapper">
-
+    <!-- 根据状态查询所有服务器 -->
+    <select id="queryServerStatus" parameterType="String" resultType="org.jeecg.modules.devops.server.entity.DevopsServer">
+        SELECT *
+        FROM devops_server
+        WHERE server_status = #{status_free}
+    </select>
 </mapper>
