@@ -30,6 +30,27 @@ public class DevopsCompileServiceImpl extends ServiceImpl<DevopsCompileMapper, D
     @Autowired
     private DevopsCompileMapper devopsCompileMapper;
 
+    /**
+     * SERVER_STATUS 服务器 状态 0 空闲, 1 占用, 2 关机, 3 编译前占有该数据库
+     */
+    private final static String SERVER_STATUS = "0";
+
+    /**
+     * SERVER_STATUS 服务器 状态 0 空闲, 1 占用, 2 关机, 3 编译前占有该数据库
+     */
+    private final static String SERVER_STATUS_3 = "3";
+
+    /**
+     * CODE_STATUS 代码同步 状态 -1 同步失败, 0 刚建立, 1 正在同步, 2 已经同步完成
+     */
+    private final static String CODE_STATUS = "2";
+
+    /**
+     * COMPILE_STATUS 编译代码 状态 -1 等待中, 0 成功, 1 初始化, 2 参数错误
+     * 3 新项目名错误, 4 编译中, 5 编译失败, 6 编译停止
+     */
+    private final static String COMPILE_STATUS__1 = "-1";
+
     private static LinkedList<DevopsCompile> queueCompile = new LinkedList<>();
 
     @Override
@@ -71,14 +92,14 @@ public class DevopsCompileServiceImpl extends ServiceImpl<DevopsCompileMapper, D
             messages = new Messages<>(Resoure.Code.ID_NOT_EXIST, Resoure.Message.get(Resoure.Code.ID_NOT_EXIST), null);
             return messages;
         }
-        List<DevopsServer> devopsServersList = getServerIP("0", devopsCompile.getCompilePlatformId(), "2");
+        List<DevopsServer> devopsServersList = getServerIP(SERVER_STATUS, devopsCompile.getCompilePlatformId(), CODE_STATUS);
         System.out.println("服务器List —————————" + devopsServersList);
 
         /*
          * 当没有可以用的服务器退出
          * */
         if (devopsServersList.size() == 0) {
-            setCompileStatus("-1",devopsCompile.getId());
+            setCompileStatus(COMPILE_STATUS__1,devopsCompile.getId());
             queueCompile.add(devopsCompile);
             System.out.println(queueCompile);
             return messages;
@@ -105,13 +126,12 @@ public class DevopsCompileServiceImpl extends ServiceImpl<DevopsCompileMapper, D
                 + "&devops_compile_id=" + devopsCompile.getId()
                 + "&is_new_project=" + "false";
         System.out.println(curldata + curlurl);
-        setServerStatus("3", devopsServer.getId());
+        setServerStatus(SERVER_STATUS_3, devopsServer.getId());
         String[] cmds = {"curl", "-X", "POST", "http://" + curldata + curlurl};
-        //写入数据库 3
         if (CurlUtil.run(cmds)) {
             messages = new Messages<>(Resoure.Code.SUCCESS, Resoure.Message.get(Resoure.Code.SUCCESS), null);
         } else {
-            setServerStatus("0", devopsServer.getId());
+            setServerStatus(SERVER_STATUS, devopsServer.getId());
             messages = new Messages<>(Resoure.Code.CURL_RUN_FAIL, Resoure.Message.get(Resoure.Code.CURL_RUN_FAIL), null);
         }
         return messages;
@@ -124,7 +144,7 @@ public class DevopsCompileServiceImpl extends ServiceImpl<DevopsCompileMapper, D
         DevopsCompile autoDevopsCompile = null;
         System.out.println("定时任务");
         for (DevopsCompile devopsCompile : queueCompile) {
-            List<DevopsServer> devopsServersList = getServerIP("0", devopsCompile.getCompilePlatformId(), "2");
+            List<DevopsServer> devopsServersList = getServerIP(SERVER_STATUS, devopsCompile.getCompilePlatformId(), "2");
             if (devopsServersList.size() != 0) {
                 queueCompile.remove(devopsCompile);
                 autoDevopsCompile = devopsCompile;
@@ -150,10 +170,10 @@ public class DevopsCompileServiceImpl extends ServiceImpl<DevopsCompileMapper, D
                         + "&devops_compile_id=" + autoDevopsCompile.getId()
                         + "&is_new_project=" + "false";
                 System.out.println(curldata + curlurl);
-                setServerStatus("3", devopsServer.getId());
+                setServerStatus(SERVER_STATUS_3, devopsServer.getId());
                 String[] cmds = {"curl", "-X", "POST", "http://" + curldata + curlurl};
                 if (!CurlUtil.run(cmds)) {
-                    setServerStatus("0", devopsServer.getId());
+                    setServerStatus(SERVER_STATUS, devopsServer.getId());
                 }
             }
         }
