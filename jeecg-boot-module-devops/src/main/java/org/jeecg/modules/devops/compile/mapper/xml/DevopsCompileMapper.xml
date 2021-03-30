@@ -16,4 +16,19 @@
         WHERE code_server_id = #{serverId} and
         code_name = #{platform};
     </select>
+
+    <!-- 写入服务器状态 -->
+    <update id="updateServerStatus">
+        UPDATE devops_server
+        SET server_status =  #{serverStatus}
+        WHERE id = #{serverID};
+    </update>
+
+    <!-- 写入服务器状态 -->
+    <update id="updateCompileStatus">
+        UPDATE devops_compile
+        SET compile_status =  #{compileStatus}
+        WHERE id = #{compileID};
+    </update>
+
 </mapper>

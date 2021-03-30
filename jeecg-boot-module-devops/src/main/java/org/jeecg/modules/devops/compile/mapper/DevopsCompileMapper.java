@@ -27,5 +27,15 @@ public interface DevopsCompileMapper extends BaseMapper<DevopsCompile> {
      */
     public DevopsCode queryCodeDir(@Param("status") String serverId, String platform);
 
+    /**
+     * 更新服务器状态
+     */
+    public void updateServerStatus(@Param("status") String serverStatus, String serverID);
+
+    /**
+     * 更新数据库
+     ** @return
+     */
+    public void updateCompileStatus(@Param("status") String compileStatus, String compileID);
 
 }

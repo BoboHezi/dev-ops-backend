@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * @Description: 编译管理
  * @Author: jeecg-boot
- * @Date:   2021-02-22
+ * @Date: 2021-02-22
  * @Version: V1.0
  */
 public interface IDevopsCompileService extends IService<DevopsCompile> {
@@ -20,9 +20,15 @@ public interface IDevopsCompileService extends IService<DevopsCompile> {
 
     Messages<?> stopCompile(DevopsCompile devopsCompile);
 
-    List<DevopsServer> getServerIP(String serverStatus,String platform,String codeStatus);
+    List<DevopsServer> getServerIP(String serverStatus, String platform, String codeStatus);
 
     DevopsCode getCodeDir(String serverId, String platform);
 
     Messages<?> checkLog(DevopsCompile devopsCompile);
+
+    void setServerStatus(String serverStatus, String serverID);
+
+    void autoCompileQueue();
+
+    void setCompileStatus(String compileStatus, String compileID);
 }
