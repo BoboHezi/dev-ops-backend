@@ -20131,6 +20131,9 @@ GO
 INSERT INTO [dbo].[sys_quartz_job]  VALUES (N'df26ecacf0f75d219d746750fe84bbee', NULL, NULL, N'0', N'admin', N'2020-05-02 15:40:35.0000000', N'org.jeecg.modules.quartz.job.SampleParamJob', N'0/1 * * * * ?', N'scott', N'带参测试 后台将每隔1秒执行输出日志', N'-1')
 GO
 
+INSERT INTO [dbo].[sys_quartz_job]  VALUES (N'df26ecacf0f75d219d126750fe84bbe5', NULL, NULL, N'0', N'admin', N'2020-05-02 15:40:35.0000000', N'org.jeecg.modules.devops.compile.service.impl.DevopsCompileServiceImpl', N'0/59 * * * * ? *', N'scott', N'跑后台的List 循环任务', N'-1')
+GO
+
 
 -- ----------------------------
 -- Table structure for sys_role

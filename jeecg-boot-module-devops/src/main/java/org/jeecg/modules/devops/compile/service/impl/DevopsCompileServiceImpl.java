@@ -34,10 +34,6 @@ public class DevopsCompileServiceImpl extends ServiceImpl<DevopsCompileMapper, D
      * SERVER_STATUS 服务器 状态 0 空闲, 1 占用, 2 关机, 3 编译前占有该数据库
      */
     private final static String SERVER_STATUS = "0";
-
-    /**
-     * SERVER_STATUS 服务器 状态 0 空闲, 1 占用, 2 关机, 3 编译前占有该数据库
-     */
     private final static String SERVER_STATUS_3 = "3";
 
     /**
@@ -47,9 +43,11 @@ public class DevopsCompileServiceImpl extends ServiceImpl<DevopsCompileMapper, D
 
     /**
      * COMPILE_STATUS 编译代码 状态 -1 等待中, 0 成功, 1 初始化, 2 参数错误
-     * 3 新项目名错误, 4 编译中, 5 编译失败, 6 编译停止
+     * 3 新项目名错误, 4 编译中, 5 编译失败, 6 编译停止 , 7 关联jenkins
      */
     private final static String COMPILE_STATUS__1 = "-1";
+    private final static String COMPILE_STATUS_2 = "2";
+    private final static String COMPILE_STATUS_7 = "7";
 
     private static LinkedList<DevopsCompile> queueCompile = new LinkedList<>();
 
@@ -95,6 +93,16 @@ public class DevopsCompileServiceImpl extends ServiceImpl<DevopsCompileMapper, D
         List<DevopsServer> devopsServersList = getServerIP(SERVER_STATUS, devopsCompile.getCompilePlatformId(), CODE_STATUS);
         System.out.println("服务器List —————————" + devopsServersList);
 
+        String compileProjectName = devopsCompile.getCompileProjectId();
+        if (compileProjectName == null) {
+            compileProjectName = devopsCompile.getNewCompileProject();
+        }
+        if(compileProjectName == null){
+            setCompileStatus(COMPILE_STATUS_2,devopsCompile.getId());
+            messages = new Messages<>(Resoure.Code.ID_NOT_EXIST, Resoure.Message.get(Resoure.Code.ID_NOT_EXIST), null);
+            return messages;
+        }
+
         /*
          * 当没有可以用的服务器退出
          * */
@@ -104,12 +112,9 @@ public class DevopsCompileServiceImpl extends ServiceImpl<DevopsCompileMapper, D
             System.out.println(queueCompile);
             return messages;
         }
+        setCompileStatus(COMPILE_STATUS_7,devopsCompile.getId());
         devopsServer = devopsServersList.get(0);
         devopsCode = getCodeDir(devopsServer.getId(), devopsCompile.getCompilePlatformId());
-        String compileProjectName = devopsCompile.getCompileProjectId();
-        if (compileProjectName == null) {
-            compileProjectName = devopsCompile.getNewCompileProject();
-        }
         String curldata = Config.JENKINS_NAME + ":" + Config.JENKINS_TOKEN + "@";
         String curlurl = Config.JENKINS_BASE_URL
                 + "job/build-line/buildWithParameters?"
@@ -154,6 +159,11 @@ public class DevopsCompileServiceImpl extends ServiceImpl<DevopsCompileMapper, D
                 if (compileProjectName == null) {
                     compileProjectName = autoDevopsCompile.getNewCompileProject();
                 }
+                if(compileProjectName == null){
+                    setCompileStatus(COMPILE_STATUS_2,devopsCompile.getId());
+                    return ;
+                }
+                setCompileStatus(COMPILE_STATUS_7,devopsCompile.getId());
                 String curldata = Config.JENKINS_NAME + ":" + Config.JENKINS_TOKEN + "@";
                 String curlurl = Config.JENKINS_BASE_URL
                         + "job/build-line/buildWithParameters?"
