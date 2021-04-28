@@ -126,9 +126,6 @@ public class DevopsCompileServiceImpl extends ServiceImpl<DevopsCompileMapper, D
         }
         DevopsFtp devopsFtp = getFtp(devopsCompile.getCompileSignFtpId());
         DevopsSign devopsSign = getSign(devopsCompile.getCompileLoginAccount());
-
-        System.out.println(devopsFtp+"   \n" +devopsSign + devopsCompile.getCompileVerityFtpUserName());
-
         setCompileStatus(COMPILE_STATUS_2,devopsCompile.getId());
         devopsServer = devopsServersList.get(0);
         devopsCode = getCodeDir(devopsServer.getId(), devopsCompile.getCompilePlatformId());
@@ -187,6 +184,8 @@ public class DevopsCompileServiceImpl extends ServiceImpl<DevopsCompileMapper, D
                     setCompileStatus(COMPILE_STATUS_3,devopsCompile.getId());
                     return ;
                 }
+                DevopsFtp devopsFtp = getFtp(devopsCompile.getCompileSignFtpId());
+                DevopsSign devopsSign = getSign(devopsCompile.getCompileLoginAccount());
                 setCompileStatus(COMPILE_STATUS_2,devopsCompile.getId());
                 String curldata = Config.JENKINS_NAME + ":" + Config.JENKINS_TOKEN + "@";
                 String curlurl = Config.JENKINS_BASE_URL
@@ -202,6 +201,13 @@ public class DevopsCompileServiceImpl extends ServiceImpl<DevopsCompileMapper, D
                         + "&build_verity=" + (autoDevopsCompile.getCompileIsVerify().equals("Y") ? "true" : "false")
                         + "&devops_host_id=" + devopsServer.getId()
                         + "&devops_compile_id=" + autoDevopsCompile.getId()
+                        + "&sv_platform_cclist=" + devopsCompile.getCompileSendEmail()
+                        + "&sign_ftp_upload_username=" + devopsFtp.getFtpUserName()
+                        + "&sign_ftp_upload_password=" + devopsFtp.getFtpPassword()
+                        + "&sv_platform_username=" +  devopsSign.getSignAccount()
+                        + "&sv_platform_password=" +  devopsSign.getSignPassword()
+                        + "&sv_platform_terrace=" + devopsCompile.getCompileSvPlatformTerrace()
+                        + "&publish_username=" + devopsCompile.getCompileVerityFtpUserName()
                         + "&is_new_project=" + "false"
                         ;
                 System.out.println(curldata + curlurl);
