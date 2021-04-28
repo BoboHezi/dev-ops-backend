@@ -7,7 +7,9 @@ import org.jeecg.modules.devops.compile.service.IDevopsCompileService;
 import org.jeecg.modules.devops.entity.Config;
 import org.jeecg.modules.devops.entity.Messages;
 import org.jeecg.modules.devops.entity.Resoure;
+import org.jeecg.modules.devops.ftp.entity.DevopsFtp;
 import org.jeecg.modules.devops.server.entity.DevopsServer;
+import org.jeecg.modules.devops.sign.entity.DevopsSign;
 import org.jeecg.modules.devops.utils.CurlUtil;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
@@ -42,12 +44,12 @@ public class DevopsCompileServiceImpl extends ServiceImpl<DevopsCompileMapper, D
     private final static String CODE_STATUS = "2";
 
     /**
-     * COMPILE_STATUS 编译代码 状态 -1 等待中, 0 成功, 1 初始化, 2 参数错误
-     * 3 新项目名错误, 4 编译中, 5 编译失败, 6 编译停止 , 7 关联jenkins
+     * COMPILE_STATUS 编译代码 状态 -1 等待中, 0 成功, 1 初始化, 2 连接中 3 参数错误
+     * 4 新项目名错误, 5 编译中, 6 编译失败, 7 编译停止 , 8 关联jenkins
      */
     private final static String COMPILE_STATUS__1 = "-1";
+    private final static String COMPILE_STATUS_3 = "3";
     private final static String COMPILE_STATUS_2 = "2";
-    private final static String COMPILE_STATUS_7 = "7";
 
     private static LinkedList<DevopsCompile> queueCompile = new LinkedList<>();
 
@@ -55,6 +57,17 @@ public class DevopsCompileServiceImpl extends ServiceImpl<DevopsCompileMapper, D
     public List<DevopsServer> getServerIP(String serverStatus, String platform, String codeStatus) {
         return devopsCompileMapper.queryServerStatus(serverStatus, platform, codeStatus);
     }
+
+    @Override
+    public DevopsFtp getFtp(String id) {
+        return devopsCompileMapper.queryFtp(id);
+    }
+
+    @Override
+    public DevopsSign getSign(String id) {
+        return devopsCompileMapper.querySign(id);
+    }
+
 
     @Override
     public DevopsCode getCodeDir(String serverId, String platform) {
@@ -65,10 +78,10 @@ public class DevopsCompileServiceImpl extends ServiceImpl<DevopsCompileMapper, D
     @Override
     public Messages<?> checkLog(DevopsCompile devopsCompile) {
         Messages messages = new Messages<>(Resoure.Code.CURL_RUN_FAIL, Resoure.Message.get(Resoure.Code.CURL_RUN_FAIL), null);
-        if (devopsCompile.getCompileLogUrl() != null) {
-            messages = new Messages<>(Resoure.Code.SUCCESS, Resoure.Message.get(Resoure.Code.SUCCESS), null);
-            return messages;
-        }
+//        if (devopsCompile.getCompileLogUrl() != null) {
+//            messages = new Messages<>(Resoure.Code.SUCCESS, Resoure.Message.get(Resoure.Code.SUCCESS), null);
+//            return messages;
+//        }
         return messages;
     }
 
@@ -98,11 +111,10 @@ public class DevopsCompileServiceImpl extends ServiceImpl<DevopsCompileMapper, D
             compileProjectName = devopsCompile.getNewCompileProject();
         }
         if(compileProjectName == null){
-            setCompileStatus(COMPILE_STATUS_2,devopsCompile.getId());
+            setCompileStatus(COMPILE_STATUS_3,devopsCompile.getId());
             messages = new Messages<>(Resoure.Code.ID_NOT_EXIST, Resoure.Message.get(Resoure.Code.ID_NOT_EXIST), null);
             return messages;
         }
-
         /*
          * 当没有可以用的服务器退出
          * */
@@ -112,7 +124,12 @@ public class DevopsCompileServiceImpl extends ServiceImpl<DevopsCompileMapper, D
             System.out.println(queueCompile);
             return messages;
         }
-        setCompileStatus(COMPILE_STATUS_7,devopsCompile.getId());
+        DevopsFtp devopsFtp = getFtp(devopsCompile.getCompileSignFtpId());
+        DevopsSign devopsSign = getSign(devopsCompile.getCompileLoginAccount());
+
+        System.out.println(devopsFtp+"   \n" +devopsSign + devopsCompile.getCompileVerityFtpUserName());
+
+        setCompileStatus(COMPILE_STATUS_2,devopsCompile.getId());
         devopsServer = devopsServersList.get(0);
         devopsCode = getCodeDir(devopsServer.getId(), devopsCompile.getCompilePlatformId());
         String curldata = Config.JENKINS_NAME + ":" + Config.JENKINS_TOKEN + "@";
@@ -129,6 +146,13 @@ public class DevopsCompileServiceImpl extends ServiceImpl<DevopsCompileMapper, D
                 + "&build_verity=" + (devopsCompile.getCompileIsVerify().equals("Y") ? "true" : "false")
                 + "&devops_host_id=" + devopsServer.getId()
                 + "&devops_compile_id=" + devopsCompile.getId()
+                + "&sv_platform_cclist=" + devopsCompile.getCompileSendEmail()
+                + "&sign_ftp_upload_username=" + devopsFtp.getFtpUserName()
+                + "&sign_ftp_upload_password=" + devopsFtp.getFtpPassword()
+                + "&sv_platform_username=" +  devopsSign.getSignAccount()
+                + "&sv_platform_password=" +  devopsSign.getSignPassword()
+                + "&sv_platform_terrace=" + devopsCompile.getCompileSvPlatformTerrace()
+                + "&publish_username=" + devopsCompile.getCompileVerityFtpUserName()
                 + "&is_new_project=" + "false";
         System.out.println(curldata + curlurl);
         setServerStatus(SERVER_STATUS_3, devopsServer.getId());
@@ -160,10 +184,10 @@ public class DevopsCompileServiceImpl extends ServiceImpl<DevopsCompileMapper, D
                     compileProjectName = autoDevopsCompile.getNewCompileProject();
                 }
                 if(compileProjectName == null){
-                    setCompileStatus(COMPILE_STATUS_2,devopsCompile.getId());
+                    setCompileStatus(COMPILE_STATUS_3,devopsCompile.getId());
                     return ;
                 }
-                setCompileStatus(COMPILE_STATUS_7,devopsCompile.getId());
+                setCompileStatus(COMPILE_STATUS_2,devopsCompile.getId());
                 String curldata = Config.JENKINS_NAME + ":" + Config.JENKINS_TOKEN + "@";
                 String curlurl = Config.JENKINS_BASE_URL
                         + "job/build-line/buildWithParameters?"
@@ -178,7 +202,8 @@ public class DevopsCompileServiceImpl extends ServiceImpl<DevopsCompileMapper, D
                         + "&build_verity=" + (autoDevopsCompile.getCompileIsVerify().equals("Y") ? "true" : "false")
                         + "&devops_host_id=" + devopsServer.getId()
                         + "&devops_compile_id=" + autoDevopsCompile.getId()
-                        + "&is_new_project=" + "false";
+                        + "&is_new_project=" + "false"
+                        ;
                 System.out.println(curldata + curlurl);
                 setServerStatus(SERVER_STATUS_3, devopsServer.getId());
                 String[] cmds = {"curl", "-X", "POST", "http://" + curldata + curlurl};

@@ -31,4 +31,16 @@
         WHERE id = #{compileID};
     </update>
 
+    <!-- 根据id 查服务器密码 -->
+    <select id="queryFtp" parameterType="String" resultType="org.jeecg.modules.devops.ftp.entity.DevopsFtp">
+        SELECT * FROM devops_ftp
+        WHERE id = #{id}
+    </select>
+
+    <!-- 根据id 查服务器密码 -->
+    <select id="querySign" parameterType="String" resultType="org.jeecg.modules.devops.sign.entity.DevopsSign">
+        SELECT * FROM devops_sign
+        WHERE id = #{id}
+    </select>
+
 </mapper>

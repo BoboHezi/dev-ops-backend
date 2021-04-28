@@ -9,9 +9,12 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.system.query.QueryGenerator;
-import org.jeecg.common.util.oConvertUtils;
+import org.jeecg.common.system.vo.LoginUser;
 import org.jeecg.modules.devops.compile.entity.DevopsCompile;
 import org.jeecg.modules.devops.compile.service.IDevopsCompileService;
 
@@ -21,20 +24,10 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 
 import org.jeecg.modules.devops.entity.Messages;
-import org.jeecg.modules.devops.project.entity.DevopsProject;
-import org.jeecg.modules.devops.project.service.IDevopsProjectService;
-import org.jeecgframework.poi.excel.ExcelImportUtil;
-import org.jeecgframework.poi.excel.def.NormalExcelConstants;
-import org.jeecgframework.poi.excel.entity.ExportParams;
-import org.jeecgframework.poi.excel.entity.ImportParams;
-import org.jeecgframework.poi.excel.view.JeecgEntityExcelView;
 import org.jeecg.common.system.base.controller.JeecgController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
-import com.alibaba.fastjson.JSON;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.jeecg.common.aspect.annotation.AutoLog;
@@ -69,6 +62,8 @@ public class DevopsCompileController extends JeecgController<DevopsCompile, IDev
 								   @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
 								   @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,
 								   HttpServletRequest req) {
+//		String user = JSON.toJSONString(req.getRemoteUser());
+//		System.out.println(user);
 		QueryWrapper<DevopsCompile> queryWrapper = QueryGenerator.initQueryWrapper(devopsCompile, req.getParameterMap());
 		Page<DevopsCompile> page = new Page<DevopsCompile>(pageNo, pageSize);
 		IPage<DevopsCompile> pageList = devopsCompileService.page(page, queryWrapper);
@@ -181,7 +176,7 @@ public class DevopsCompileController extends JeecgController<DevopsCompile, IDev
 	 @ApiOperation(value = "编译任务-自动编译", notes = "编译任务-自动编译")
 	 @PostMapping(value = "/autoCompile")
 	 public Messages<?> autoCompile(HttpServletRequest request, @RequestBody DevopsCompile devopsCompile) {
-		 System.out.println("auto compile ... ");
+		 System.out.println("auto compile ... "+request);
 
 		 Messages<?> messages;
 		 try {
@@ -234,6 +229,28 @@ public class DevopsCompileController extends JeecgController<DevopsCompile, IDev
 			 e.printStackTrace();
 			 messages = Messages.Error(e.getMessage());
 		 }
+		 return messages;
+	 }
+
+	 /**
+	  * 更新编译状态
+	  *
+	  * @param
+	  * @return
+	  */
+	 @AutoLog(value = "编译任务-编译状态")
+	 @ApiOperation(value = "编译任务-编译状态", notes = "编译任务-编译状态")
+	 @GetMapping(value = "/updateCompileStatus")
+	 public Messages<?> updateCompileStatus(@RequestParam(name="id",required=true) String id ) {
+		 System.out.println("updateCompileStatus ... ");
+
+		 Messages<?> messages = null;
+//		 try {
+//			 messages = this.devopsCompileService.checkLog();
+//		 } catch (Exception e) {
+//			 e.printStackTrace();
+//			 messages = Messages.Error(e.getMessage());
+//		 }
 		 return messages;
 	 }
 

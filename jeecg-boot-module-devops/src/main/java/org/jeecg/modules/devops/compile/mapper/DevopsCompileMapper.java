@@ -5,7 +5,10 @@ import java.util.List;
 import org.jeecg.modules.devops.code.entity.DevopsCode;
 import org.jeecg.modules.devops.compile.entity.DevopsCompile;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.jeecg.modules.devops.ftp.entity.DevopsFtp;
+import org.jeecg.modules.devops.platform.entity.DevopsSignPlatform;
 import org.jeecg.modules.devops.server.entity.DevopsServer;
+import org.jeecg.modules.devops.sign.entity.DevopsSign;
 import org.springframework.data.repository.query.Param;
 
 /**
@@ -37,5 +40,19 @@ public interface DevopsCompileMapper extends BaseMapper<DevopsCompile> {
      ** @return
      */
     public void updateCompileStatus(@Param("status") String compileStatus, String compileID);
+
+    /**
+     * 查询ftp密码
+     ** @return
+     */
+    DevopsFtp queryFtp(@Param("status") String id);
+
+    /**
+     * 查询网站地址
+     ** @return
+     */
+    DevopsSign querySign(@Param("status") String id);
+
+
 
 }

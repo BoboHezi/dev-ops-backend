@@ -130,4 +130,22 @@ public class DevopsCompile implements Serializable {
     @Excel(name = "job_id", width = 15)
     @ApiModelProperty(value = "job_id")
     private java.lang.String compileJenkinsJobId;
+    /**签名ftp账号*/
+    @Excel(name = "签名ftp账号", width = 15)
+    @ApiModelProperty(value = "签名ftp账号")
+    @Dict(dictTable = "devops_ftp", dicText = "ftp_user_name", dicCode = "id")
+    private java.lang.String compileSignFtpId;
+    /**登录签名后台账号*/
+    @Excel(name = "登录签名后台账号", width = 15)
+    @ApiModelProperty(value = "登录签名后台账号")
+    @Dict(dictTable = "devops_sign", dicText = "sign_account", dicCode = "id")
+    private java.lang.String compileLoginAccount;
+    /**验收ftp账号*/
+    @Excel(name = "验收ftp账号", width = 15)
+    @ApiModelProperty(value = "验收ftp账号")
+    private java.lang.String compileVerityFtpUserName;
+    /**签名验收平台*/
+    @Excel(name = "签名验收平台", width = 15)
+    @ApiModelProperty(value = "签名验收平台")
+    private java.lang.String compileSvPlatformTerrace;
 }

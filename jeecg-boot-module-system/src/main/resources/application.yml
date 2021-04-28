@@ -7,5 +7,5 @@ spring:
 config:
   jenkins_username: admin
   jenkins_username_pwd: admin
-  jenkins_token: 1150d1c0e2b2cc9062e852dfac6f352d9f
-  jenkins_url: 192.168.151.238:8080/
+  jenkins_token: 11565f73f17dfbabf9a24991540f18d761
+  jenkins_url: 192.168.48.2:8080/

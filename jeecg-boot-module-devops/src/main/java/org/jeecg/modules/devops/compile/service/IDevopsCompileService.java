@@ -4,7 +4,10 @@ import org.jeecg.modules.devops.code.entity.DevopsCode;
 import org.jeecg.modules.devops.compile.entity.DevopsCompile;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.jeecg.modules.devops.entity.Messages;
+import org.jeecg.modules.devops.ftp.entity.DevopsFtp;
+import org.jeecg.modules.devops.platform.entity.DevopsSignPlatform;
 import org.jeecg.modules.devops.server.entity.DevopsServer;
+import org.jeecg.modules.devops.sign.entity.DevopsSign;
 
 import java.util.List;
 
@@ -31,4 +34,8 @@ public interface IDevopsCompileService extends IService<DevopsCompile> {
     void autoCompileQueue();
 
     void setCompileStatus(String compileStatus, String compileID);
+
+    DevopsFtp getFtp(String id);
+
+    DevopsSign getSign(String id);
 }
