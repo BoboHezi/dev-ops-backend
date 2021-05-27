@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -28,7 +29,7 @@ import java.util.*;
  * @Version: V1.0
  */
 @Service
-public class DevopsCompileServiceImpl extends ServiceImpl<DevopsCompileMapper, DevopsCompile> implements IDevopsCompileService , Job {
+public class DevopsCompileServiceImpl extends ServiceImpl<DevopsCompileMapper, DevopsCompile> implements IDevopsCompileService, Job {
     @Autowired
     private DevopsCompileMapper devopsCompileMapper;
 
@@ -50,12 +51,25 @@ public class DevopsCompileServiceImpl extends ServiceImpl<DevopsCompileMapper, D
     private final static String COMPILE_STATUS__1 = "-1";
     private final static String COMPILE_STATUS_3 = "3";
     private final static String COMPILE_STATUS_2 = "2";
+    private final static String COMPILE_STATUS_8 = "8";
 
-    private static LinkedList<DevopsCompile> queueCompile = new LinkedList<>();
+    private Random random = new Random();
 
     @Override
-    public List<DevopsServer> getServerIP(String serverStatus, String platform, String codeStatus) {
-        return devopsCompileMapper.queryServerStatus(serverStatus, platform, codeStatus);
+    public List<DevopsServer> getServerIP(String serverStatus, String platform, String serverIp, String codeStatus) {
+        if (serverIp == null || serverIp.isEmpty()) {
+            return devopsCompileMapper.queryServerStatus(serverStatus, platform, codeStatus);
+        }
+        return devopsCompileMapper.queryServerStatusAndIp(serverStatus, platform, serverIp, codeStatus);
+    }
+
+    //检验服务器，是否有代码存在
+    @Override
+    public List<DevopsServer> getServerCode(String platform, String serverIp, String codeStatus) {
+        if (serverIp == null || serverIp.isEmpty()) {
+            return devopsCompileMapper.queryServerCode(platform, codeStatus);
+        }
+        return devopsCompileMapper.queryServerCodeAndIp(platform, serverIp, codeStatus);
     }
 
     @Override
@@ -64,8 +78,8 @@ public class DevopsCompileServiceImpl extends ServiceImpl<DevopsCompileMapper, D
     }
 
     @Override
-    public DevopsSign getSign(String id) {
-        return devopsCompileMapper.querySign(id);
+    public DevopsSign getSign(String signAccount) {
+        return devopsCompileMapper.querySign(signAccount);
     }
 
 
@@ -74,10 +88,52 @@ public class DevopsCompileServiceImpl extends ServiceImpl<DevopsCompileMapper, D
         return devopsCompileMapper.queryCodeDir(serverId, platform);
     }
 
+    @Override
+    public List<DevopsCompile> getCompileQueue(String compileStatus) {
+        return devopsCompileMapper.queryCompileQueue(compileStatus);
+    }
+
+    @Override
+    public void setCompileQueueLevel(String id, String Level) {
+        devopsCompileMapper.updateCompileQueueLevel(id, Level);
+    }
+
+    @Override
+    public void cancelCompile(String id, String compileStatus) {
+        devopsCompileMapper.updateCompileStatus(compileStatus, id);
+    }
+
+    @Override
+    public DevopsCompile selectCompile(String id) {
+        return devopsCompileMapper.queryCompile(id);
+    }
+
+    @Override
+    public Messages<?> handleCopy(String id) {
+        Messages messages = new Messages<>(Resoure.Code.FAIL, Resoure.Message.get(Resoure.Code.FAIL), null);
+        System.out.println(id);
+        DevopsCompile devopsCompile = selectCompile(id);
+        System.out.println(devopsCompile.toString());
+        if (devopsCompile != null) {
+
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+            devopsCompileMapper.insertHandleCopy((new Date()).getTime() + "" + random.nextInt(10000), devopsCompile.getCreateBy(), df.format(new Date()), devopsCompile.getSysOrgCode(), devopsCompile.getCompileName(),
+                    devopsCompile.getCompileDesc(), devopsCompile.getCompilePlatformId(), devopsCompile.getNewCompileProject(),
+                    devopsCompile.getCompileProjectId(), devopsCompile.getCompileServerIp(), devopsCompile.getCompileVariant(),
+                    devopsCompile.getCompileAction(), devopsCompile.getCompileIsSign(), devopsCompile.getCompileIsVerify(),
+                    devopsCompile.getCompileSendEmail(), devopsCompile.getCompileSignFtpId(), devopsCompile.getCompileLoginAccount(),
+                    devopsCompile.getCompileVerityFtpUserName(), devopsCompile.getCompileSvPlatformTerrace(),
+                    devopsCompile.getCherryPick());
+            messages = new Messages<>(Resoure.Code.SUCCESS, Resoure.Message.get(Resoure.Code.SUCCESS), null);
+        }
+        return messages;
+    }
+
     /*查看log*/
     @Override
     public Messages<?> checkLog(DevopsCompile devopsCompile) {
-        Messages messages = new Messages<>(Resoure.Code.CURL_RUN_FAIL, Resoure.Message.get(Resoure.Code.CURL_RUN_FAIL), null);
+        Messages messages = new Messages<>(Resoure.Code.FAIL, Resoure.Message.get(Resoure.Code.FAIL), null);
 //        if (devopsCompile.getCompileLogUrl() != null) {
 //            messages = new Messages<>(Resoure.Code.SUCCESS, Resoure.Message.get(Resoure.Code.SUCCESS), null);
 //            return messages;
@@ -92,8 +148,9 @@ public class DevopsCompileServiceImpl extends ServiceImpl<DevopsCompileMapper, D
 
     @Override
     public void setCompileStatus(String compileStatus, String compileID) {
-        devopsCompileMapper.updateCompileStatus(compileStatus,compileID);
+        devopsCompileMapper.updateCompileStatus(compileStatus, compileID);
     }
+
     @Override
     public Messages<?> autoCompile(DevopsCompile devopsCompile) {
         DevopsServer devopsServer = null;
@@ -103,15 +160,16 @@ public class DevopsCompileServiceImpl extends ServiceImpl<DevopsCompileMapper, D
             messages = new Messages<>(Resoure.Code.ID_NOT_EXIST, Resoure.Message.get(Resoure.Code.ID_NOT_EXIST), null);
             return messages;
         }
-        List<DevopsServer> devopsServersList = getServerIP(SERVER_STATUS, devopsCompile.getCompilePlatformId(), CODE_STATUS);
+        List<DevopsServer> devopsServersList = getServerIP(SERVER_STATUS, devopsCompile.getCompilePlatformId()
+                , devopsCompile.getCompileServerIp(), CODE_STATUS);
         System.out.println("服务器List —————————" + devopsServersList);
 
         String compileProjectName = devopsCompile.getCompileProjectId();
         if (compileProjectName == null) {
             compileProjectName = devopsCompile.getNewCompileProject();
         }
-        if(compileProjectName == null){
-            setCompileStatus(COMPILE_STATUS_3,devopsCompile.getId());
+        if (compileProjectName == null) {
+            setCompileStatus(COMPILE_STATUS_3, devopsCompile.getId());
             messages = new Messages<>(Resoure.Code.ID_NOT_EXIST, Resoure.Message.get(Resoure.Code.ID_NOT_EXIST), null);
             return messages;
         }
@@ -119,38 +177,35 @@ public class DevopsCompileServiceImpl extends ServiceImpl<DevopsCompileMapper, D
          * 当没有可以用的服务器退出
          * */
         if (devopsServersList.size() == 0) {
-            setCompileStatus(COMPILE_STATUS__1,devopsCompile.getId());
-            queueCompile.add(devopsCompile);
-            System.out.println(queueCompile);
+            List<DevopsServer> devopsServersCodeList = getServerCode(devopsCompile.getCompilePlatformId()
+                    , devopsCompile.getCompileServerIp(), CODE_STATUS);
+            if (devopsServersCodeList.size() == 0) {
+                setCompileStatus(COMPILE_STATUS_8, devopsCompile.getId());
+            } else {
+                setCompileStatus(COMPILE_STATUS__1, devopsCompile.getId());
+            }
             return messages;
         }
         DevopsFtp devopsFtp = getFtp(devopsCompile.getCompileSignFtpId());
-        DevopsSign devopsSign = getSign(devopsCompile.getCompileLoginAccount());
-        setCompileStatus(COMPILE_STATUS_2,devopsCompile.getId());
+        DevopsSign devopsSign = getSign(devopsCompile.getCreateBy());
+        setCompileStatus(COMPILE_STATUS_2, devopsCompile.getId());
         devopsServer = devopsServersList.get(0);
         devopsCode = getCodeDir(devopsServer.getId(), devopsCompile.getCompilePlatformId());
         String curldata = Config.JENKINS_NAME + ":" + Config.JENKINS_TOKEN + "@";
-        String curlurl = Config.JENKINS_BASE_URL
-                + "job/build-line/buildWithParameters?"
-                + "project_name=" + compileProjectName
-                + "&code_dir=" + devopsCode.getCodeDir()
-                + "&server_hostname=" + devopsServer.getServerHost()
-                + "&server_ip_address=" + devopsServer.getServerIp()
-                + "&server_passwd=" + devopsServer.getServerPassword().replace("#", "%23")
-                + "&build_variant=" + devopsCompile.getCompileVariant()
-                + "&build_sign=" + (devopsCompile.getCompileIsSign().equals("Y") ? "true" : "false")
-                + "&build_action=" + devopsCompile.getCompileAction()
-                + "&build_verity=" + (devopsCompile.getCompileIsVerify().equals("Y") ? "true" : "false")
-                + "&devops_host_id=" + devopsServer.getId()
-                + "&devops_compile_id=" + devopsCompile.getId()
-                + "&sv_platform_cclist=" + devopsCompile.getCompileSendEmail()
-                + "&sign_ftp_upload_username=" + devopsFtp.getFtpUserName()
-                + "&sign_ftp_upload_password=" + devopsFtp.getFtpPassword()
-                + "&sv_platform_username=" +  devopsSign.getSignAccount()
-                + "&sv_platform_password=" +  devopsSign.getSignPassword()
-                + "&sv_platform_terrace=" + devopsCompile.getCompileSvPlatformTerrace()
-                + "&publish_username=" + devopsCompile.getCompileVerityFtpUserName()
-                + "&is_new_project=" + "false";
+        String curlurl = CurlUtil.getAutoCompile(compileProjectName, devopsCode.getCodeDir(), devopsServer.getServerHost(),
+                devopsServer.getServerIp(), devopsServer.getServerPassword().replace("#", "%23"), devopsCompile.getCompileVariant()
+                , (devopsCompile.getCompileIsSign().equals("Y") ? "true" : "false"), devopsCompile.getCompileAction(),
+                (devopsCompile.getCompileIsVerify().equals("Y") ? "true" : "false"), devopsServer.getId(), devopsCompile.getId(),
+                devopsCompile.getCompileSendEmail(), devopsCompile.getCompileSvPlatformTerrace(), devopsCompile.getCompileVerityFtpUserName());
+        if (devopsCompile.getCherryPick() != null) {
+            curlurl += CurlUtil.getAutoCompileAddCherryPick(devopsCompile.getCherryPick());
+        }
+        if (devopsFtp != null) {
+            curlurl += CurlUtil.getAutoCompileAddFtp(devopsFtp.getFtpUserName(), devopsFtp.getFtpPassword());
+        }
+        if (devopsSign != null) {
+            curlurl += CurlUtil.getAutoCompileAddSign(devopsSign.getSignAccount(), devopsSign.getSignPassword());
+        }
         System.out.println(curldata + curlurl);
         setServerStatus(SERVER_STATUS_3, devopsServer.getId());
         String[] cmds = {"curl", "-X", "POST", "http://" + curldata + curlurl};
@@ -167,55 +222,44 @@ public class DevopsCompileServiceImpl extends ServiceImpl<DevopsCompileMapper, D
     public void autoCompileQueue() {
         DevopsServer devopsServer = null;
         DevopsCode devopsCode = null;
-        DevopsCompile autoDevopsCompile = null;
         System.out.println("定时任务");
-        for (DevopsCompile devopsCompile : queueCompile) {
-            List<DevopsServer> devopsServersList = getServerIP(SERVER_STATUS, devopsCompile.getCompilePlatformId(), "2");
+        List<DevopsCompile> devopsCompiles = getCompileQueue(COMPILE_STATUS__1);
+        System.out.println(devopsCompiles.toString());
+        for (DevopsCompile devopsCompile : devopsCompiles) {
+            List<DevopsServer> devopsServersList = getServerIP(SERVER_STATUS, devopsCompile.getCompilePlatformId(), devopsCompile.getCompileServerIp(), CODE_STATUS);
             if (devopsServersList.size() != 0) {
-                queueCompile.remove(devopsCompile);
-                autoDevopsCompile = devopsCompile;
                 devopsServer = devopsServersList.get(0);
-                devopsCode = getCodeDir(devopsServer.getId(), autoDevopsCompile.getCompilePlatformId());
-                String compileProjectName = autoDevopsCompile.getCompileProjectId();
+                devopsCode = getCodeDir(devopsServer.getId(), devopsCompile.getCompilePlatformId());
+                String compileProjectName = devopsCompile.getCompileProjectId();
                 if (compileProjectName == null) {
-                    compileProjectName = autoDevopsCompile.getNewCompileProject();
-                }
-                if(compileProjectName == null){
-                    setCompileStatus(COMPILE_STATUS_3,devopsCompile.getId());
-                    return ;
+                    compileProjectName = devopsCompile.getNewCompileProject();
                 }
                 DevopsFtp devopsFtp = getFtp(devopsCompile.getCompileSignFtpId());
-                DevopsSign devopsSign = getSign(devopsCompile.getCompileLoginAccount());
-                setCompileStatus(COMPILE_STATUS_2,devopsCompile.getId());
+                DevopsSign devopsSign = getSign(devopsCompile.getCreateBy());
+                setCompileStatus(COMPILE_STATUS_2, devopsCompile.getId());
                 String curldata = Config.JENKINS_NAME + ":" + Config.JENKINS_TOKEN + "@";
-                String curlurl = Config.JENKINS_BASE_URL
-                        + "job/build-line/buildWithParameters?"
-                        + "project_name=" + compileProjectName
-                        + "&code_dir=" + devopsCode.getCodeDir()
-                        + "&server_hostname=" + devopsServer.getServerHost()
-                        + "&server_ip_address=" + devopsServer.getServerIp()
-                        + "&server_passwd=" + devopsServer.getServerPassword().replace("#", "%23")
-                        + "&build_variant=" + autoDevopsCompile.getCompileVariant()
-                        + "&build_sign=" + (autoDevopsCompile.getCompileIsSign().equals("Y") ? "true" : "false")
-                        + "&build_action=" + autoDevopsCompile.getCompileAction()
-                        + "&build_verity=" + (autoDevopsCompile.getCompileIsVerify().equals("Y") ? "true" : "false")
-                        + "&devops_host_id=" + devopsServer.getId()
-                        + "&devops_compile_id=" + autoDevopsCompile.getId()
-                        + "&sv_platform_cclist=" + devopsCompile.getCompileSendEmail()
-                        + "&sign_ftp_upload_username=" + devopsFtp.getFtpUserName()
-                        + "&sign_ftp_upload_password=" + devopsFtp.getFtpPassword()
-                        + "&sv_platform_username=" +  devopsSign.getSignAccount()
-                        + "&sv_platform_password=" +  devopsSign.getSignPassword()
-                        + "&sv_platform_terrace=" + devopsCompile.getCompileSvPlatformTerrace()
-                        + "&publish_username=" + devopsCompile.getCompileVerityFtpUserName()
-                        + "&is_new_project=" + "false"
-                        ;
+                String curlurl = CurlUtil.getAutoCompile(compileProjectName, devopsCode.getCodeDir(), devopsServer.getServerHost(),
+                        devopsServer.getServerIp(), devopsServer.getServerPassword().replace("#", "%23"), devopsCompile.getCompileVariant()
+                        , (devopsCompile.getCompileIsSign().equals("Y") ? "true" : "false"), devopsCompile.getCompileAction(),
+                        (devopsCompile.getCompileIsVerify().equals("Y") ? "true" : "false"), devopsServer.getId(), devopsCompile.getId(),
+                        devopsCompile.getCompileSendEmail(), devopsCompile.getCompileSvPlatformTerrace(), devopsCompile.getCompileVerityFtpUserName());
+                if (devopsCompile.getCherryPick() != null) {
+                    curlurl += CurlUtil.getAutoCompileAddCherryPick(devopsCompile.getCherryPick());
+                }
+                if (devopsFtp != null) {
+                    curlurl += CurlUtil.getAutoCompileAddFtp(devopsFtp.getFtpUserName(), devopsFtp.getFtpPassword());
+                }
+                if (devopsSign != null) {
+                    curlurl += CurlUtil.getAutoCompileAddSign(devopsSign.getSignAccount(), devopsSign.getSignPassword());
+                }
                 System.out.println(curldata + curlurl);
                 setServerStatus(SERVER_STATUS_3, devopsServer.getId());
                 String[] cmds = {"curl", "-X", "POST", "http://" + curldata + curlurl};
                 if (!CurlUtil.run(cmds)) {
                     setServerStatus(SERVER_STATUS, devopsServer.getId());
                 }
+            } else {
+                setCompileQueueLevel(devopsCompile.getId(), (devopsCompile.getCompileQueueLevel() + 1) + "");
             }
         }
     }
@@ -229,10 +273,7 @@ public class DevopsCompileServiceImpl extends ServiceImpl<DevopsCompileMapper, D
         }
 
         String curldata = Config.JENKINS_NAME + ":" + Config.JENKINS_TOKEN + "@";
-        String curlurl = Config.JENKINS_BASE_URL
-                + "job/stop-build/buildWithParameters?"
-                + "job_name_extra=" + devopsCompile.getCompileJenkinsJobName()
-                + "&job_id=" + devopsCompile.getCompileJenkinsJobId();
+        String curlurl = CurlUtil.getStopCompile(devopsCompile.getCompileJenkinsJobName(), devopsCompile.getCompileJenkinsJobId());
         System.out.println(curldata + "         " + curlurl);
         String[] cmds = {"curl", "-X", "POST", "http://" + curldata + curlurl};
         if (CurlUtil.run(cmds)) {
@@ -247,7 +288,7 @@ public class DevopsCompileServiceImpl extends ServiceImpl<DevopsCompileMapper, D
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         try {
             autoCompileQueue();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

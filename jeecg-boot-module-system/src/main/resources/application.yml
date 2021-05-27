@@ -9,3 +9,8 @@ config:
   jenkins_username_pwd: admin
   jenkins_token: 11565f73f17dfbabf9a24991540f18d761
   jenkins_url: 192.168.48.2:8080/
+
+#  jenkins_username: admin
+#  jenkins_username_pwd: admin
+#  jenkins_token: 11dc9281f119ef20ebd89685f7b97e07e1
+#  jenkins_url: 192.168.151.238:8080/

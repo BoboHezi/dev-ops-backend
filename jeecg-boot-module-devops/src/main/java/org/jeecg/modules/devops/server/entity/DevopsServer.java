@@ -74,6 +74,10 @@ public class DevopsServer implements Serializable {
 	@Excel(name = "密码", width = 15)
     @ApiModelProperty(value = "密码")
     private java.lang.String serverPassword;
+    /**优先级*/
+    @Excel(name = "优先级", width = 15)
+    @ApiModelProperty(value = "优先级")
+    private java.lang.Integer serverPerformance;
 	/**状态信息*/
 	@Excel(name = "状态信息", width = 15)
     @ApiModelProperty(value = "状态信息")

@@ -108,6 +108,13 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
 	}
 
 	@Override
+	//@Cacheable(value = CacheConstant.SYS_DICT_TABLE_CACHE)
+	public List<DictModel> queryTableDictItemsByCodeAndUsername(String table, String text, String code,String username) {
+		log.debug("无缓存dictTableList的时候调用这里！");
+		return sysDictMapper.queryTableDictItemsByCodeAndUsername(table,text,code,username);
+	}
+
+	@Override
 	public List<DictModel> queryTableDictItemsByCodeAndFilter(String table, String text, String code, String filterSql) {
 		log.debug("无缓存dictTableList的时候调用这里！");
 		return sysDictMapper.queryTableDictItemsByCodeAndFilter(table,text,code,filterSql);

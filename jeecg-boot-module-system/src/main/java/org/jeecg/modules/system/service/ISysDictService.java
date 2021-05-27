@@ -27,6 +27,9 @@ public interface ISysDictService extends IService<SysDict> {
     @Deprecated
     List<DictModel> queryTableDictItemsByCode(String table, String text, String code);
 
+	@Deprecated
+	List<DictModel> queryTableDictItemsByCodeAndUsername(String table, String text, String code,String username);
+
     @Deprecated
 	public List<DictModel> queryTableDictItemsByCodeAndFilter(String table, String text, String code, String filterSql);
 

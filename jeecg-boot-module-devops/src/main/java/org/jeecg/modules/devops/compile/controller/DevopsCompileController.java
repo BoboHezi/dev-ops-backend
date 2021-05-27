@@ -45,7 +45,7 @@ import org.jeecg.common.aspect.annotation.AutoLog;
 public class DevopsCompileController extends JeecgController<DevopsCompile, IDevopsCompileService> {
 	@Autowired
 	private IDevopsCompileService devopsCompileService;
-	
+
 	/**
 	 * 分页列表查询
 	 *
@@ -69,7 +69,7 @@ public class DevopsCompileController extends JeecgController<DevopsCompile, IDev
 		IPage<DevopsCompile> pageList = devopsCompileService.page(page, queryWrapper);
 		return Result.OK(pageList);
 	}
-	
+
 	/**
 	 *   添加
 	 *
@@ -83,7 +83,7 @@ public class DevopsCompileController extends JeecgController<DevopsCompile, IDev
 		devopsCompileService.save(devopsCompile);
 		return Result.OK("添加成功！");
 	}
-	
+
 	/**
 	 *  编辑
 	 *
@@ -97,7 +97,7 @@ public class DevopsCompileController extends JeecgController<DevopsCompile, IDev
 		devopsCompileService.updateById(devopsCompile);
 		return Result.OK("编辑成功!");
 	}
-	
+
 	/**
 	 *   通过id删除
 	 *
@@ -111,7 +111,7 @@ public class DevopsCompileController extends JeecgController<DevopsCompile, IDev
 		devopsCompileService.removeById(id);
 		return Result.OK("删除成功!");
 	}
-	
+
 	/**
 	 *  批量删除
 	 *
@@ -125,7 +125,7 @@ public class DevopsCompileController extends JeecgController<DevopsCompile, IDev
 		this.devopsCompileService.removeByIds(Arrays.asList(ids.split(",")));
 		return Result.OK("批量删除成功!");
 	}
-	
+
 	/**
 	 * 通过id查询
 	 *
@@ -232,26 +232,41 @@ public class DevopsCompileController extends JeecgController<DevopsCompile, IDev
 		 return messages;
 	 }
 
+
 	 /**
-	  * 更新编译状态
+	  * 拷贝项目
 	  *
 	  * @param
 	  * @return
 	  */
-	 @AutoLog(value = "编译任务-编译状态")
-	 @ApiOperation(value = "编译任务-编译状态", notes = "编译任务-编译状态")
-	 @GetMapping(value = "/updateCompileStatus")
-	 public Messages<?> updateCompileStatus(@RequestParam(name="id",required=true) String id ) {
-		 System.out.println("updateCompileStatus ... ");
+	 @AutoLog(value = "拷贝项目")
+	 @ApiOperation(value = "拷贝项目", notes = "拷贝项目")
+	 @PostMapping(value = "/handleCopy")
+	 public Messages<?> handleCopy(HttpServletRequest request, @RequestBody DevopsCompile devopsCompile ) {
+		 System.out.println("handleCopy ... ");
 
 		 Messages<?> messages = null;
-//		 try {
-//			 messages = this.devopsCompileService.checkLog();
-//		 } catch (Exception e) {
-//			 e.printStackTrace();
-//			 messages = Messages.Error(e.getMessage());
-//		 }
+		 try {
+			 messages = this.devopsCompileService.handleCopy(devopsCompile.getId());
+		 } catch (Exception e) {
+			 e.printStackTrace();
+			 messages = Messages.Error(e.getMessage());
+		 }
 		 return messages;
+	 }
+
+	 /**
+	  * 取消排队
+	  *
+	  * @param
+	  * @return
+	  */
+	 @AutoLog(value = "取消排队")
+	 @ApiOperation(value="取消排队", notes="取消排队")
+	 @PostMapping(value = "/cancelCompile")
+	 public Result<?> cancelCompile(@RequestBody DevopsCompile devopsCompile) {
+		 devopsCompileService.cancelCompile(devopsCompile.getId(),"1");
+		 return Result.OK("取消成功！");
 	 }
 
  }

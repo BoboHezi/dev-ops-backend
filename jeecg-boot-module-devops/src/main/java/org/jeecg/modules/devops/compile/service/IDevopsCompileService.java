@@ -23,9 +23,15 @@ public interface IDevopsCompileService extends IService<DevopsCompile> {
 
     Messages<?> stopCompile(DevopsCompile devopsCompile);
 
-    List<DevopsServer> getServerIP(String serverStatus, String platform, String codeStatus);
+    List<DevopsServer> getServerIP(String serverStatus, String platform, String serverIp, String codeStatus);
+
+    List<DevopsServer> getServerCode(String platform, String serverIp, String codeStatus);
 
     DevopsCode getCodeDir(String serverId, String platform);
+
+    Messages<?> handleCopy(String id);
+
+    DevopsCompile selectCompile(String id);
 
     Messages<?> checkLog(DevopsCompile devopsCompile);
 
@@ -38,4 +44,10 @@ public interface IDevopsCompileService extends IService<DevopsCompile> {
     DevopsFtp getFtp(String id);
 
     DevopsSign getSign(String id);
+
+    List<DevopsCompile> getCompileQueue(String compileStatus);
+
+    void setCompileQueueLevel(String id, String Level);
+
+    void cancelCompile(String id, String compileStatus);
 }

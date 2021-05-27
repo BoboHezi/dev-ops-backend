@@ -21,7 +21,18 @@
 	<select id="queryTableDictItemsByCode" parameterType="String"  resultType="org.jeecg.common.system.vo.DictModel">
 		   select ${text} as "text",${code} as "value" from ${table}
 	</select>
-	
+
+	<!--通过查询指定table的 text code 获取字典-->
+	<select id="queryTableDictItemsByCode" parameterType="String"  resultType="org.jeecg.common.system.vo.DictModel">
+		select ${text} as "text",${code} as "value" from ${table}
+	</select>
+
+	<!--通过查询指定table的 text code 获取字典-->
+	<select id="queryTableDictItemsByCodeAndUsername" parameterType="String"  resultType="org.jeecg.common.system.vo.DictModel">
+		select ${text} as "text",${code} as "value" from ${table}
+		where create_by = #{username}
+	</select>
+
 	<!--通过查询指定table的 text code 获取字典（指定查询条件）-->
 	<select id="queryTableDictItemsByCodeAndFilter" parameterType="String"  resultType="org.jeecg.common.system.vo.DictModel">
 		   select ${text} as "text",${code} as "value" from ${table}

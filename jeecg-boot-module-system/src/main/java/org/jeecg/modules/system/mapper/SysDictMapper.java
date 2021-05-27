@@ -40,6 +40,9 @@ public interface SysDictMapper extends BaseMapper<SysDict> {
 	public List<DictModel> queryTableDictItemsByCode(@Param("table") String table,@Param("text") String text,@Param("code") String code);
 
 	@Deprecated
+	public List<DictModel> queryTableDictItemsByCodeAndUsername(@Param("table") String table,@Param("text") String text,@Param("code") String code,String username);
+
+	@Deprecated
 	public List<DictModel> queryTableDictItemsByCodeAndFilter(@Param("table") String table,@Param("text") String text,@Param("code") String code,@Param("filterSql") String filterSql);
 
 	@Deprecated

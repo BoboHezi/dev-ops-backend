@@ -1,9 +1,6 @@
 package org.jeecg.modules.devops.compile.entity;
 
 import java.io.Serializable;
-import java.io.UnsupportedEncodingException;
-import java.util.Date;
-import java.math.BigDecimal;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -148,4 +145,13 @@ public class DevopsCompile implements Serializable {
     @Excel(name = "签名验收平台", width = 15)
     @ApiModelProperty(value = "签名验收平台")
     private java.lang.String compileSvPlatformTerrace;
+    /**cherry_pick*/
+    @Excel(name = "cherry_pick", width = 15)
+    @ApiModelProperty(value = "cherry_pick")
+    private java.lang.String cherryPick;
+    /**compile_queue_level*/
+    @Excel(name = "compile_queue_level", width = 15)
+    @ApiModelProperty(value = "优先级")
+    private java.lang.Integer compileQueueLevel;
+
 }

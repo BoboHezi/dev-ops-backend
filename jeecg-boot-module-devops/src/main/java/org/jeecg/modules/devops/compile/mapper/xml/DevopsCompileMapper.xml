@@ -7,7 +7,88 @@
         devops_code b on a.id = b.code_server_id and
         a.server_status = #{serverStatus}
         and b.code_name = #{platform}
-        and b.code_status = #{codeStatus};
+        and b.code_status = #{codeStatus}
+        order by server_performance desc;
+    </select>
+
+    <select id="queryCompile" parameterType="String" resultType="org.jeecg.modules.devops.compile.entity.DevopsCompile">
+        SELECT * FROM devops_compile WHERE id = #{id};
+    </select>
+
+    <insert id="insertHandleCopy" parameterType="org.jeecg.modules.devops.compile.entity.DevopsCompile">
+        INSERT INTO devops_compile (
+        id,
+        create_by,
+        create_time,
+        sys_org_code,
+        compile_name,
+        compile_desc,
+        compile_platform_id,
+        new_compile_project,
+        compile_project_id,
+        compile_server_ip,
+        compile_variant,
+        compile_action,
+        compile_is_sign,
+        compile_is_verify,
+        compile_send_email,
+        compile_sign_ftp_id,
+        compile_login_account,
+        compile_verity_ftp_user_name,
+        compile_sv_platform_terrace,
+        cherry_pick
+        ) VALUES (
+        #{id},
+        #{create_by},
+        #{create_time},
+        #{sys_org_code},
+        #{compile_name},
+        #{compile_desc},
+        #{compile_platform_id},
+        #{new_compile_project},
+        #{compile_project_id},
+        #{compile_server_ip},
+        #{compile_variant},
+        #{compile_action},
+        #{compile_is_sign},
+        #{compile_is_verify},
+        #{compile_send_email},
+        #{compile_sign_ftp_id},
+        #{compile_login_account},
+        #{compile_verity_ftp_user_name},
+        #{compile_sv_platform_terrace},
+        #{cherry_pick});
+    </insert>
+
+
+    <!-- 根据状态查询服务器含有当前项目 -->
+    <select id="queryServerStatusAndIp" parameterType="String" resultType="org.jeecg.modules.devops.server.entity.DevopsServer">
+        SELECT a.* FROM devops_server a inner join
+        devops_code b on a.id = b.code_server_id
+        and a.server_status = #{serverStatus}
+        and a.server_ip = #{serverIp}
+        and b.code_name = #{platform}
+        and b.code_status = #{codeStatus} ;
+    </select>
+
+    <select id="queryServerCode" parameterType="String" resultType="org.jeecg.modules.devops.server.entity.DevopsServer">
+        SELECT a.* FROM devops_server a inner join
+        devops_code b on a.id = b.code_server_id
+        and a.server_status != 2
+        and a.server_status != 4
+        and b.code_name = #{platform}
+        and b.code_status = #{codeStatus} ;
+    </select>
+
+    <!-- 根据状态查询服务器含有当前项目 -->
+    <select id="queryServerCodeAndIp" parameterType="String" resultType="org.jeecg.modules.devops.server.entity.DevopsServer">
+        SELECT a.* FROM devops_server a inner join
+        devops_code b on a.id = b.code_server_id
+        and a.server_status != 2
+        and a.server_status != 4
+        and a.server_ip = #{serverIp}
+        and b.code_name = #{platform}
+        and b.code_status = #{codeStatus} ;
     </select>
 
     <!-- 根据状态查询地址 -->
@@ -40,7 +121,20 @@
     <!-- 根据id 查服务器密码 -->
     <select id="querySign" parameterType="String" resultType="org.jeecg.modules.devops.sign.entity.DevopsSign">
         SELECT * FROM devops_sign
-        WHERE id = #{id}
+        WHERE sign_account = #{signAccount}
     </select>
+
+    <select id="queryCompileQueue" parameterType="String" resultType="org.jeecg.modules.devops.compile.entity.DevopsCompile">
+        SELECT * FROM devops_compile
+        WHERE compile_status = #{compileStatus}
+        order by compile_queue_level desc;
+    </select>
+
+    <!-- 写入服务器状态 -->
+    <update id="updateCompileQueueLevel">
+        UPDATE devops_compile
+        SET compile_queue_level =  #{Level}
+        WHERE id = #{id};
+    </update>
 
 </mapper>
