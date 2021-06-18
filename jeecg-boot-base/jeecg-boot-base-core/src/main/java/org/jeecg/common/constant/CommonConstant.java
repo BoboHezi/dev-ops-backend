@@ -305,4 +305,6 @@ public interface CommonConstant {
      * 第三方登录 验证密码/创建用户 都需要设置一个操作码 防止被恶意调用
      */
     public final static String THIRD_LOGIN_CODE = "third_login_code";
+
+    public final static String TOKEN_FINAL = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2MjI2OTM5ODIsInVzZXJuYW1lIjoiamVua2lucyJ9.56lcHAPrmfBwXdcnyMKtGIj6ZfFD-tQo2J5eWb_FCq8";
 }

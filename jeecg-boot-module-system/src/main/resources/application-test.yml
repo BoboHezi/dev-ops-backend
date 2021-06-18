@@ -24,10 +24,11 @@ spring:
      multipart:
         max-file-size: 10MB
         max-request-size: 10MB
+
   mail:
-    host: smtp.163.com
-    username: jeecgos@163.com
-    password: ??
+    host: smtp.263.net
+    username: droi_devops_service@droi.com
+    password: Droi*#2021
     properties:
       mail:
         smtp:

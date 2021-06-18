@@ -5,12 +5,24 @@ spring:
     active: dev
 
 config:
-  jenkins_username: admin
-  jenkins_username_pwd: admin
-  jenkins_token: 11565f73f17dfbabf9a24991540f18d761
-  jenkins_url: 192.168.48.2:8080/
-
 #  jenkins_username: admin
 #  jenkins_username_pwd: admin
-#  jenkins_token: 11dc9281f119ef20ebd89685f7b97e07e1
-#  jenkins_url: 192.168.151.238:8080/
+#  jenkins_token: 11565f73f17dfbabf9a24991540f18d761
+#  jenkins_url: 192.168.48.2:8080/
+
+  jenkins_username: admin
+  jenkins_username_pwd: admin
+  jenkins_token: 11dc9281f119ef20ebd89685f7b97e07e1
+  jenkins_url: 192.168.151.238:8080/
+
+  mail:
+    host: smtp.263.net
+    username: droi_devops_service@droi.com
+    password: Droi*#2021
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true

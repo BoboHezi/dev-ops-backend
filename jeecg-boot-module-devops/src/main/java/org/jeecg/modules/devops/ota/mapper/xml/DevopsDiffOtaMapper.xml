@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jeecg.modules.devops.ota.mapper.DevopsDiffOtaMapper">
+
+    <select id="queryOta" parameterType="String" resultType="org.jeecg.modules.devops.ota.entity.DevopsDiffOta">
+        SELECT * FROM devops_diff_ota WHERE id = #{id};
+    </select>
+
+    <select id="queryUpload" parameterType="String" resultType="org.jeecg.modules.devops.upload.entity.DevopsUpload">
+        SELECT * FROM devops_upload WHERE upload_name = #{name};
+    </select>
+
+    <update id="updateOtaStatus">
+        UPDATE devops_diff_ota
+        SET ota_status =  #{otaStatus}
+        WHERE id = #{id};
+    </update>
+
+    <select id="queryOtaStatus" parameterType="String" resultType="org.jeecg.modules.devops.ota.entity.DevopsDiffOta">
+        SELECT * FROM devops_diff_ota WHERE ota_status = #{otaStatus};
+    </select>
+
+    <!-- 写入服务器状态 -->
+    <update id="updateOtaDir">
+        UPDATE devops_diff_ota
+        SET ota_success_dir =  #{otaSuccessDir}
+        WHERE id = #{id};
+    </update>
+
+</mapper>

@@ -19,7 +19,7 @@ import java.util.List;
  */
 public interface IDevopsCompileService extends IService<DevopsCompile> {
 
-    Messages<?> autoCompile(DevopsCompile devopsCompile);
+    Messages<?> autoCompile(String compileID);
 
     Messages<?> stopCompile(DevopsCompile devopsCompile);
 
@@ -31,9 +31,7 @@ public interface IDevopsCompileService extends IService<DevopsCompile> {
 
     Messages<?> handleCopy(String id);
 
-    DevopsCompile selectCompile(String id);
-
-    Messages<?> checkLog(DevopsCompile devopsCompile);
+    DevopsCompile getCompile(String id);
 
     void setServerStatus(String serverStatus, String serverID);
 

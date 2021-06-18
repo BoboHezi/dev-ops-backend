@@ -14,4 +14,8 @@ import java.util.List;
  */
 public interface IDevopsServerService extends IService<DevopsServer> {
     List<DevopsServer> getServerIP(String status);
+
+    String handleRestart(String id);
+
+    void handleAllRestart();
 }

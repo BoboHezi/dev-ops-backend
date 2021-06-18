@@ -153,5 +153,17 @@ public class DevopsCompile implements Serializable {
     @Excel(name = "compile_queue_level", width = 15)
     @ApiModelProperty(value = "优先级")
     private java.lang.Integer compileQueueLevel;
+    /**签名ftp地址*/
+    @Excel(name = "签名ftp地址", width = 15)
+    @ApiModelProperty(value = "签名ftp地址")
+    private java.lang.String compileSignFtpUrl;
+    /**签名任务id*/
+    @Excel(name = "签名任务id", width = 15)
+    @ApiModelProperty(value = "签名任务id")
+    private java.lang.String compileSignId;
+    /**验收任务id*/
+    @Excel(name = "验收任务id", width = 15)
+    @ApiModelProperty(value = "验收任务id")
+    private java.lang.String compileVerityId;
 
 }

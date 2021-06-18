@@ -35,18 +35,18 @@ public class CurlUtil {
                                         String compileVerityFtpUserName) {
         return Config.JENKINS_BASE_URL
                 + "job/build-line/buildWithParameters?"
-                + "project_name=" + projectName
+                + "project_name=" + projectName.trim()
                 + "&code_dir=" + dir
                 + "&server_hostname=" + host
                 + "&server_ip_address=" + serverIp
-                + "&server_passwd=" + serverPwd
+                + "&server_passwd=" + StringUtil.replaceString(serverPwd)
                 + "&build_variant=" + compileVariant
                 + "&build_sign=" + compileSign
                 + "&build_action=" + compileAction
                 + "&build_verity=" + compileVerify
                 + "&devops_host_id=" + serverId
                 + "&devops_compile_id=" + compileId
-                + "&sv_platform_cclist=" + compileEmail
+                + "&sv_platform_cclist=" + compileEmail.trim()
                 + "&sv_platform_terrace=" + compileSvPlatformTerrace
                 + "&publish_username=" + compileVerityFtpUserName;
     }
@@ -68,10 +68,39 @@ public class CurlUtil {
                 + "&job_id=" + JenkinsJobId;
     }
 
-    public static String getAutoCompileAddCherryPick(String cherryPick) {
-        return "&cherry_picks=" + cherryPick.replace(" ", "%20").replace("\\", "%5C")
-                .replace("\"", "%5C%22").replace(":", "%3A").replace("/", "%2F")
-                .replace("&", "%26").replace(";", "%3B").replace("@", "%40");
+    public static String getRestartServer(String id, String serverIp, String serverHost, String serverPwd) {
+        return Config.JENKINS_BASE_URL
+                + "job/reboot-host/buildWithParameters?"
+                + "devops_host_id=" + id
+                + "&server_ip_address=" + serverIp
+                + "&server_hostname=" + serverHost
+                + "&server_passwd=" + StringUtil.replaceString(serverPwd);
     }
 
+    public static String getAutoCompileAction(String verityPurpose) {
+        if (verityPurpose.equals("ota")) {
+            return "&sv_verity_purpose=official";
+        } else {
+            return "&sv_verity_purpose=factory";
+        }
+    }
+
+    public static String getAutoCompileAddCherryPick(String cherryPick) {
+        return "&cherry_picks=" + StringUtil.replaceString(cherryPick.trim());
+    }
+
+    public static String getActionOta(String id,String before_target_file, String before_ftp_username,
+                                      String before_ftp_passwd, String after_target_file,
+                                      String after_ftp_username,String after_ftp_passwd,String sv_platform_terrace) {
+        return Config.JENKINS_BASE_URL
+                + "job/otadiff/buildWithParameters?"
+                + "id="+id
+                + "&before_target_file=" + before_target_file.trim()
+                + "&before_ftp_username=" + before_ftp_username
+                + "&before_ftp_passwd=" + StringUtil.replaceString(before_ftp_passwd)
+                + "&after_target_file=" + after_target_file.trim()
+                + "&after_ftp_username=" + after_ftp_username
+                + "&after_ftp_passwd=" + StringUtil.replaceString(after_ftp_passwd)
+                + "&sv_platform_terrace=" + sv_platform_terrace;
+    }
 }

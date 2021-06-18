@@ -1,4 +1,4 @@
-package org.jeecg.modules.devops.code.entity;
+package org.jeecg.modules.devops.ota.entity;
 
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
@@ -18,17 +18,17 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
- * @Description: 源代码管理
+ * @Description: 做差分包表格
  * @Author: jeecg-boot
- * @Date:   2021-02-22
+ * @Date:   2021-05-27
  * @Version: V1.0
  */
 @Data
-@TableName("devops_code")
+@TableName("devops_diff_ota")
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = false)
-@ApiModel(value="devops_code对象", description="源代码管理")
-public class DevopsCode implements Serializable {
+@ApiModel(value="devops_diff_ota对象", description="做差分包表格")
+public class DevopsDiffOta implements Serializable {
     private static final long serialVersionUID = 1L;
 
 	/**主键*/
@@ -54,33 +54,40 @@ public class DevopsCode implements Serializable {
 	/**所属部门*/
     @ApiModelProperty(value = "所属部门")
     private java.lang.String sysOrgCode;
-	/**名称*/
-	@Excel(name = "名称", width = 15)
-    @ApiModelProperty(value = "名称")
-    private java.lang.String codeName;
-	/**描述*/
-	@Excel(name = "描述", width = 15)
-    @ApiModelProperty(value = "描述")
-    private java.lang.String codeDesc;
-	/**repo路径*/
-	@Excel(name = "repo路径", width = 15)
-    @ApiModelProperty(value = "repo路径")
-    private java.lang.String codeRepoUrl;
-    /**拉取状态*/
-    @Excel(name = "拉取状态", width = 15)
-    @ApiModelProperty(value = "拉取状态")
-    private java.lang.Integer codeStatus;
-	/**服务器IP对应id*/
-	@Excel(name = "服务器IP对应id", width = 15, dictTable = "devops_server", dicText = "server_ip", dicCode = "id")
-	@Dict(dictTable = "devops_server", dicText = "server_ip", dicCode = "id")
-    @ApiModelProperty(value = "服务器IP对应id")
-    private java.lang.String codeServerId;
-	/**存放路径*/
-	@Excel(name = "存放路径", width = 15)
-    @ApiModelProperty(value = "存放路径")
-    private java.lang.String codeDir;
-    /**确认是否是OTA*/
-    @Excel(name = "确认是否是OTA", width = 15)
-    @ApiModelProperty(value = "确认是否是OTA")
-    private java.lang.String codeOta;
+	/**上个项目地址*/
+	@Excel(name = "上个项目地址", width = 15)
+    @ApiModelProperty(value = "上个项目地址")
+    private java.lang.String otaOriginalDir;
+	/**目标项目地址*/
+	@Excel(name = "目标项目地址", width = 15)
+    @ApiModelProperty(value = "目标项目地址")
+    private java.lang.String otaNewDir;
+	/**ota登录账号*/
+	@Excel(name = "ota登录账号", width = 15)
+    @ApiModelProperty(value = "ota登录账号")
+    private java.lang.String otaUploadName;
+	/**ota平台*/
+	@Excel(name = "ota平台", width = 15)
+    @ApiModelProperty(value = "ota平台")
+    private java.lang.String otaPlatform;
+	/**ota成功状态*/
+	@Excel(name = "ota成功状态", width = 15)
+    @ApiModelProperty(value = "ota成功状态")
+    private java.lang.Integer otaStatus;
+    /**邮件*/
+    @Excel(name = "邮件", width = 15)
+    @ApiModelProperty(value = "邮件")
+    private java.lang.String otaEmail;
+    /**原ota登录账号*/
+    @Excel(name = "原ota登录账号", width = 15)
+    @ApiModelProperty(value = "原ota登录账号")
+    private java.lang.String otaOriginalUploadName;
+    /**ota包的地址*/
+    @Excel(name = "ota包的地址", width = 15)
+    @ApiModelProperty(value = "ota包的地址")
+    private java.lang.String otaSuccessDir;
+    /**ota任务Id*/
+    @Excel(name = "ota任务Id", width = 15)
+    @ApiModelProperty(value = "ota任务Id")
+    private java.lang.String otaTaskId;
 }
