@@ -37,6 +37,9 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.jeecg.common.aspect.annotation.AutoLog;
 
+import static org.jeecg.modules.devops.StatusCode.SERVER_STATUS_0;
+import static org.jeecg.modules.devops.StatusCode.SERVER_STATUS_2;
+
 /**
  * @Description: 服务器表单
  * @Author: jeecg-boot
@@ -171,6 +174,24 @@ public class DevopsServerController extends JeecgController<DevopsServer, IDevop
         devopsServerService.handleAllRestart();
         return Result.OK("成功");
     }
+
+    /**
+     * @param
+     * @return
+     */
+    @AutoLog(value = "占用释放服务器")
+    @ApiOperation(value = "占用释放服务器", notes = "占用释放服务器")
+    @GetMapping(value = "/handleSelect")
+    public Result<?> handleSelect(@RequestParam(name = "id", required = true) String id, String status) {
+        if (status.equals(SERVER_STATUS_2)) {
+            status = SERVER_STATUS_0;
+        } else {
+            status = SERVER_STATUS_2;
+        }
+        devopsServerService.setStatusServer(id, status);
+        return Result.OK("成功");
+    }
+
 
     /**
      * 导出excel

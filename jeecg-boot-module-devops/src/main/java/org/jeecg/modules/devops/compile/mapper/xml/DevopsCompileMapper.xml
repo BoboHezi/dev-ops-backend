@@ -137,4 +137,12 @@
         WHERE id = #{id};
     </update>
 
+    <!-- 写入服务器状态 -->
+    <update id="clearJenkinsData">
+        UPDATE devops_compile
+        SET compile_sign_id = NULL,compile_verity_id = NULL,compile_sign_ftp_url = NULL,compile_jenkins_job_id = NULL,
+        compile_jenkins_job_name = NULL,compile_build_finish_time = NULL,compile_build_time = NULL,compile_log_url = NULL
+        WHERE id = #{id};
+    </update>
+
 </mapper>

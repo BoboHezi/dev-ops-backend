@@ -18,18 +18,17 @@ public class EventBusTools {
         if (null == thread) {
             thread = new myThread();
             new Thread(thread).start();
-        }else {
+        } else {
             new Thread(thread).start();
         }
     }
 
-    class myThread implements Runnable{
+    class myThread implements Runnable {
         @Override
         public void run() {
             if (emailMessage != null)
-                emailSendMsgHandle.SendMsg(emailMessage.getReceiver(), emailMessage.getTitle(), emailMessage.getContent());
+            emailSendMsgHandle.SendMsg(emailMessage.getReceiver(), emailMessage.getTitle(), emailMessage.getContent());
             emailMessage = null;
         }
     }
-
 }

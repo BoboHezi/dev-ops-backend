@@ -39,7 +39,7 @@ public class DevopsServerServiceImpl extends ServiceImpl<DevopsServerMapper, Dev
         String curldata = Config.JENKINS_NAME + ":" + Config.JENKINS_TOKEN + "@";
         String curlurl = CurlUtil.getRestartServer(id, devopsServer.getServerIp(), devopsServer.getServerHost(), devopsServer.getServerPassword());
         System.out.println(curlurl);
-        devopsCompileMapper.updateServerStatus(SERVER_STATUS_5, id);
+        setStatusServer(id,SERVER_STATUS_5);
         String[] cmds = {"curl", "-X", "POST", "http://" + curldata + curlurl};
         if (CurlUtil.run(cmds)) {
             return "成功";
@@ -56,4 +56,11 @@ public class DevopsServerServiceImpl extends ServiceImpl<DevopsServerMapper, Dev
             handleRestart(devopsServer.getId());
         }
     }
+
+    @Override
+    public void setStatusServer(String id, String status) {
+        devopsCompileMapper.updateServerStatus(status, id);
+    }
+
+
 }

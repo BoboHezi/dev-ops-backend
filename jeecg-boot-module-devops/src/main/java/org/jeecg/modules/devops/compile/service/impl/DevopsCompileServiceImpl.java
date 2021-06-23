@@ -91,6 +91,15 @@ public class DevopsCompileServiceImpl extends ServiceImpl<DevopsCompileMapper, D
         devopsCompileMapper.updateCompileStatus(compileStatus, id);
     }
 
+    /**
+     * 清楚jenkins数据
+     * @param id
+     */
+    @Override
+    public void clearJenkins(String id) {
+        devopsCompileMapper.clearJenkinsData(id);
+    }
+
     @Override
     public DevopsCompile getCompile(String id) {
         return devopsCompileMapper.queryCompile(id);
@@ -253,6 +262,9 @@ public class DevopsCompileServiceImpl extends ServiceImpl<DevopsCompileMapper, D
     }
 
     private void Compile(DevopsServer devopsServer, DevopsCompile devopsCompile) {
+
+        clearJenkins(devopsCompile.getId());
+
         DevopsCode devopsCode = getCodeDir(devopsServer.getId(), devopsCompile.getCompilePlatformId());
         String compileProjectName = devopsCompile.getCompileProjectId();
         if (compileProjectName == null) {

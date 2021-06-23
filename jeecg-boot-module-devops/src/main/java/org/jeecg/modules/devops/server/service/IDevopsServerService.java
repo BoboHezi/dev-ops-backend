@@ -18,4 +18,6 @@ public interface IDevopsServerService extends IService<DevopsServer> {
     String handleRestart(String id);
 
     void handleAllRestart();
+
+    void setStatusServer(String id,String status);
 }

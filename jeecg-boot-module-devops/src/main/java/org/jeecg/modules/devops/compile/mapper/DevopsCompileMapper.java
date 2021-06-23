@@ -101,4 +101,9 @@ public interface DevopsCompileMapper extends BaseMapper<DevopsCompile> {
      ** @return
      */
     void updateCompileQueueLevel(@Param("status") String id, String Level);
+
+    /**
+     * 清除数据 jenkins
+     */
+    void clearJenkinsData(String id);
 }

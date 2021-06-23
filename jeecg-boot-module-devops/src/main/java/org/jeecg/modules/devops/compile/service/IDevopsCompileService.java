@@ -48,4 +48,6 @@ public interface IDevopsCompileService extends IService<DevopsCompile> {
     void setCompileQueueLevel(String id, String Level);
 
     void cancelCompile(String id, String compileStatus);
+
+    void clearJenkins(String id);
 }
