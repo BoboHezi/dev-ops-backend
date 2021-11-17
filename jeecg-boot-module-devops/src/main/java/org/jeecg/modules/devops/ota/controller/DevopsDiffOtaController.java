@@ -181,9 +181,10 @@ public class DevopsDiffOtaController extends JeecgController<DevopsDiffOta, IDev
     @GetMapping(value = "/setJenkinsOtaStatus")
     public Result<?> setJenkinsOtaStatus(@RequestParam(name = "id", required = true) String id,
                                          @RequestParam(name = "status", required = true) String status,
-                                         @RequestParam(name = "otaDir", required = true) String otaDir) {
-        System.out.println("ota jenkins "+id +"     "+status+"     "+otaDir);
-        devopsDiffOtaService.setStatusDir(id,status,otaDir);
+                                         @RequestParam(name = "otaDir", required = true) String otaDir,
+                                         @RequestParam(name = "otaLogUrl", required = true) String otaLogUrl
+                                         ) {
+        devopsDiffOtaService.setStatusDir(id,status,otaDir,otaLogUrl);
         return Result.OK("SUCCESS");
     }
 
@@ -198,7 +199,20 @@ public class DevopsDiffOtaController extends JeecgController<DevopsDiffOta, IDev
     @GetMapping(value = "/handleOta")
     public Result<?> handleOta(HttpServletRequest request, @RequestParam(name = "id", required = true) String id) {
         devopsDiffOtaService.handleOta(id);
-        return Result.OK("正在制作");
+        return Result.OK("正在制作","");
+    }
+
+    /**
+     * 复制OTA
+     *
+     * @param
+     * @return
+     */
+    @AutoLog(value = "复制OTA")
+    @ApiOperation(value = "复制OTA", notes = "复制OTA")
+    @GetMapping(value = "/handleCopy")
+    public Result<?> handleCopy(HttpServletRequest request, @RequestParam(name = "id", required = true) String id) {
+        return Result.OK(devopsDiffOtaService.handleCopy(id).getMsg(),"");
     }
 
     /**
@@ -212,7 +226,7 @@ public class DevopsDiffOtaController extends JeecgController<DevopsDiffOta, IDev
     @GetMapping(value = "/cancelOta")
     public Result<?> cancelOta(HttpServletRequest request, @RequestParam(name = "id", required = true) String id) {
         devopsDiffOtaService.cancelOta(id);
-        return Result.OK("正在制作");
+        return Result.OK("正在制作","");
     }
 
 

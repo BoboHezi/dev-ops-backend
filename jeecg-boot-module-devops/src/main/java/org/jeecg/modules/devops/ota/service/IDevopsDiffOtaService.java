@@ -1,5 +1,6 @@
 package org.jeecg.modules.devops.ota.service;
 
+import org.jeecg.modules.devops.entity.Messages;
 import org.jeecg.modules.devops.ota.entity.DevopsDiffOta;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -12,7 +13,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface IDevopsDiffOtaService extends IService<DevopsDiffOta> {
     void handleOta(String id);
 
-    void setStatusDir(String id, String status, String otaDir);
+    void setStatusDir(String id, String status, String otaDir,String otaLogUrl);
 
     void cancelOta(String id);
+
+    Messages<?> handleCopy(String id);
 }

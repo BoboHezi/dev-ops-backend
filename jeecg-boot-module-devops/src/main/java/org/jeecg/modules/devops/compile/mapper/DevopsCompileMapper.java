@@ -14,91 +14,62 @@ import org.springframework.data.repository.query.Param;
 /**
  * @Description: 编译管理
  * @Author: jeecg-boot
- * @Date:   2021-02-22
+ * @Date: 2021-02-22
  * @Version: V1.0
  */
 public interface DevopsCompileMapper extends BaseMapper<DevopsCompile> {
 
     /**
-     * 根据状态查询所有服务器
-     ** @return
-     */
-    public List<DevopsServer> queryServerStatus(@Param("status") String serverStatus,String platform,String codeStatus);
-
-    /**
-     * 根据状态查询单个服务器
-     ** @return
-     */
-    public List<DevopsServer> queryServerStatusAndIp(@Param("status") String serverStatus,String platform,String serverIp,String codeStatus);
-
-    /**
-     * 根据状态查询所有服务器
-     ** @return
-     */
-    public List<DevopsServer> queryServerCode(@Param("status") String platform,String codeStatus);
-
-    /**
-     * 根据状态查询单个服务器
-     ** @return
-     */
-    public List<DevopsServer> queryServerCodeAndIp(@Param("status") String platform,String serverIp,String codeStatus);
-
-
-    /**
      * 查询数据库Compile
-     ** @return
+     * * @return
      */
     DevopsCompile queryCompile(@Param("status") String id);
 
     /**
-     * 根据状态查询单个服务器
-     ** @return
+     * * @return
      */
-    void insertHandleCopy(@Param("status")String id,String create_by,String create_time,String sys_org_code,String compile_name,String compile_desc,
-                            String compile_platform_id,String new_compile_project,String compile_project_id,String compile_server_ip,
-                            String compile_variant,String compile_action,String compile_is_sign,String compile_is_verify,
-                            String compile_send_email,String compile_sign_ftp_id,String compile_login_account,String compile_verity_ftp_user_name,
-                            String compile_sv_platform_terrace,String cherry_pick);
+    void insertHandleCopy(@Param("status") String id, String create_by, String create_time, String sys_org_code, String compile_name, String compile_desc,
+                          String compile_platform_id, String new_compile_project, String compile_project_id, String compile_server_ip,
+                          String compile_variant, String compile_action, String compile_is_sign, String compile_is_verify,
+                          String compile_send_email, String compile_sign_ftp_id, String compile_login_account, String compile_verity_ftp_user_name,
+                          String compile_sv_platform_terrace, String cherry_pick);
 
 
     /**
      * 根据条件查询地址
-     ** @return
+     * * @return
      */
     public DevopsCode queryCodeDir(@Param("status") String serverId, String platform);
 
-    /**
-     * 更新服务器状态
-     */
-    public void updateServerStatus(@Param("status") String serverStatus, String serverID);
+
 
     /**
      * 更新数据库
-     ** @return
+     * * @return
      */
     public void updateCompileStatus(@Param("status") String compileStatus, String compileID);
 
     /**
      * 查询ftp密码
-     ** @return
+     * * @return
      */
     DevopsFtp queryFtp(@Param("status") String id);
 
     /**
      * 查询网站地址
-     ** @return
+     * * @return
      */
     DevopsSign querySign(@Param("status") String signAccount);
 
     /**
      * 查找排队编译的项目
-     ** @return
+     * * @return
      */
     List<DevopsCompile> queryCompileQueue(@Param("status") String compileStatus);
 
     /**
      * 更新编译项目的优先级
-     ** @return
+     * * @return
      */
     void updateCompileQueueLevel(@Param("status") String id, String Level);
 
@@ -106,4 +77,8 @@ public interface DevopsCompileMapper extends BaseMapper<DevopsCompile> {
      * 清除数据 jenkins
      */
     void clearJenkinsData(String id);
+
+
+
+
 }

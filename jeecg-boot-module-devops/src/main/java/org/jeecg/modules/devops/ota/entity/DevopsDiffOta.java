@@ -62,10 +62,6 @@ public class DevopsDiffOta implements Serializable {
 	@Excel(name = "目标项目地址", width = 15)
     @ApiModelProperty(value = "目标项目地址")
     private java.lang.String otaNewDir;
-	/**ota登录账号*/
-	@Excel(name = "ota登录账号", width = 15)
-    @ApiModelProperty(value = "ota登录账号")
-    private java.lang.String otaUploadName;
 	/**ota平台*/
 	@Excel(name = "ota平台", width = 15)
     @ApiModelProperty(value = "ota平台")
@@ -78,10 +74,6 @@ public class DevopsDiffOta implements Serializable {
     @Excel(name = "邮件", width = 15)
     @ApiModelProperty(value = "邮件")
     private java.lang.String otaEmail;
-    /**原ota登录账号*/
-    @Excel(name = "原ota登录账号", width = 15)
-    @ApiModelProperty(value = "原ota登录账号")
-    private java.lang.String otaOriginalUploadName;
     /**ota包的地址*/
     @Excel(name = "ota包的地址", width = 15)
     @ApiModelProperty(value = "ota包的地址")
@@ -90,4 +82,12 @@ public class DevopsDiffOta implements Serializable {
     @Excel(name = "ota任务Id", width = 15)
     @ApiModelProperty(value = "ota任务Id")
     private java.lang.String otaTaskId;
+    /**服务器id*/
+    @Excel(name = "服务器id", width = 15)
+    @ApiModelProperty(value = "服务器id")
+    private java.lang.String otaServerId;
+    /**log地址*/
+    @Excel(name = "log地址", width = 15)
+    @ApiModelProperty(value = "log地址")
+    private java.lang.String otaLogUrl;
 }

@@ -5,6 +5,8 @@ import org.jeecg.modules.devops.entity.Config;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class CurlUtil {
     public static boolean run(String[] cmds) {
@@ -32,7 +34,16 @@ public class CurlUtil {
     public static String getAutoCompile(String projectName, String dir, String host, String serverIp, String serverPwd,
                                         String compileVariant, String compileSign, String compileAction, String compileVerify,
                                         String serverId, String compileId, String compileEmail, String compileSvPlatformTerrace,
-                                        String compileVerityFtpUserName) {
+                                        String compileVerityFtpUserName, int level) {
+        if (level < 50) {
+            level = 0;
+        } else if (level < 100) {
+            level = 1;
+        } else if (level < 150) {
+            level = 2;
+        } else {
+            level = 3;
+        }
         return Config.JENKINS_BASE_URL
                 + "job/build-line/buildWithParameters?"
                 + "project_name=" + projectName.trim()
@@ -48,6 +59,7 @@ public class CurlUtil {
                 + "&devops_compile_id=" + compileId
                 + "&sv_platform_cclist=" + compileEmail.trim()
                 + "&sv_platform_terrace=" + compileSvPlatformTerrace
+                + "&sv_verity_level=" + level
                 + "&publish_username=" + compileVerityFtpUserName;
     }
 
@@ -89,18 +101,56 @@ public class CurlUtil {
         return "&cherry_picks=" + StringUtil.replaceString(cherryPick.trim());
     }
 
-    public static String getActionOta(String id,String before_target_file, String before_ftp_username,
+    public static String getActionOta(String id, String before_target_file, String before_ftp_username,
                                       String before_ftp_passwd, String after_target_file,
-                                      String after_ftp_username,String after_ftp_passwd,String sv_platform_terrace) {
+                                      String after_ftp_username, String after_ftp_passwd, String sv_platform_terrace,
+                                      String serverIp, String serverHost, String serverPassword) {
         return Config.JENKINS_BASE_URL
                 + "job/otadiff/buildWithParameters?"
-                + "id="+id
+                + "id=" + id
                 + "&before_target_file=" + before_target_file.trim()
                 + "&before_ftp_username=" + before_ftp_username
                 + "&before_ftp_passwd=" + StringUtil.replaceString(before_ftp_passwd)
                 + "&after_target_file=" + after_target_file.trim()
                 + "&after_ftp_username=" + after_ftp_username
                 + "&after_ftp_passwd=" + StringUtil.replaceString(after_ftp_passwd)
-                + "&sv_platform_terrace=" + sv_platform_terrace;
+                + "&sv_platform_terrace=" + sv_platform_terrace
+                + "&ota_factory_host_ip=" + serverIp
+                + "&ota_factory_host_user=" + serverHost
+                + "&ota_factory_host_pwd=" + StringUtil.replaceString(serverPassword);
     }
+
+    public static String getLinkServer(String serverIp, String serverHost, String serverPassword,
+                                       String id, Boolean stop_terminal) {
+        return Config.JENKINS_BASE_URL
+                + "job/web-terminal/buildWithParameters?"
+                + "server_ip_address=" + serverIp
+                + "&server_hostname=" + serverHost
+                + "&server_passwd=" + StringUtil.replaceString(serverPassword)
+                + "&stop_terminal=" + stop_terminal
+                + "&id=" + id;
+    }
+
+    public static String OTA_REGEX = "^ftp://([^@]*)@([^/|^:]*)(:[\\d]+)?/(.*/)?(.*\\.zip)";
+
+    public static String getFtpName(String otaDir) {
+        Pattern rPattern = Pattern.compile(OTA_REGEX);
+        Matcher matcher = rPattern.matcher(otaDir);
+        boolean result = matcher.find();
+        if (result)
+            return matcher.group(1);
+        return "";
+    }
+
+    public static boolean getFtpVerityDir(String otaDir) {
+        Pattern rPattern = Pattern.compile(OTA_REGEX);
+        Matcher matcher = rPattern.matcher(otaDir);
+        boolean result = matcher.find();
+        System.out.println(matcher.group(2));
+        if (result)
+            if (matcher.group(2).equals("upload.droi.com") || matcher.group(2).equals("192.168.0.131"))
+                return true;
+        return false;
+    }
+
 }

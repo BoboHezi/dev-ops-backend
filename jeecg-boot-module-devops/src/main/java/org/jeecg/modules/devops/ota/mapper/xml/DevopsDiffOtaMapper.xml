@@ -10,21 +10,52 @@
         SELECT * FROM devops_upload WHERE upload_name = #{name};
     </select>
 
+    <select id="querySign" parameterType="String" resultType="org.jeecg.modules.devops.ftp.entity.DevopsFtp">
+        SELECT * FROM devops_ftp WHERE ftp_user_name = #{name};
+    </select>
+
     <update id="updateOtaStatus">
         UPDATE devops_diff_ota
-        SET ota_status =  #{otaStatus}
+        SET ota_status = #{otaStatus}
+        WHERE id = #{id};
+    </update>
+
+    <update id="updateOtaServerId">
+        UPDATE devops_diff_ota
+        SET ota_server_id = #{serverId}
         WHERE id = #{id};
     </update>
 
     <select id="queryOtaStatus" parameterType="String" resultType="org.jeecg.modules.devops.ota.entity.DevopsDiffOta">
-        SELECT * FROM devops_diff_ota WHERE ota_status = #{otaStatus};
+        SELECT * FROM devops_diff_ota WHERE ota_status = #{otaStatus} order by ota_task_id;
     </select>
 
     <!-- 写入服务器状态 -->
     <update id="updateOtaDir">
         UPDATE devops_diff_ota
-        SET ota_success_dir =  #{otaSuccessDir}
+        SET ota_status = #{status},ota_success_dir =  #{otaSuccessDir},ota_log_url = #{otaLogUrl}
         WHERE id = #{id};
     </update>
+
+    <insert id="insertHandleCopyOta" parameterType="org.jeecg.modules.devops.ota.entity.DevopsDiffOta">
+        INSERT INTO devops_diff_ota (
+        id,
+        create_by,
+        create_time,
+        sys_org_code,
+        ota_original_dir,
+        ota_new_dir,
+        ota_platform,
+        ota_email
+        ) VALUES (
+        #{id},
+        #{create_by},
+        #{create_time},
+        #{sys_org_code},
+        #{ota_original_dir},
+        #{otaNewDir},
+        #{otaPlatform},
+        #{otaEmail});
+    </insert>
 
 </mapper>

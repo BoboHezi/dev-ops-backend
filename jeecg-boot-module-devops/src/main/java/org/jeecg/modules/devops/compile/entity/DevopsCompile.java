@@ -165,5 +165,12 @@ public class DevopsCompile implements Serializable {
     @Excel(name = "验收任务id", width = 15)
     @ApiModelProperty(value = "验收任务id")
     private java.lang.String compileVerityId;
-
+    /**验收任务id*/
+    @Excel(name = "保存Vmlinux", width = 15)
+    @ApiModelProperty(value = "保存Vmlinux")
+    private java.lang.String compileSaveVmlinux;
+    /**验收任务id*/
+    @Excel(name = "项目版本号", width = 15)
+    @ApiModelProperty(value = "项目版本号")
+    private java.lang.String compileProjectNum;
 }

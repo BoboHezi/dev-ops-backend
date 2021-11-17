@@ -1,5 +1,6 @@
 package org.jeecg.modules.devops.compile.service;
 
+import org.jeecg.common.api.vo.Result;
 import org.jeecg.modules.devops.code.entity.DevopsCode;
 import org.jeecg.modules.devops.compile.entity.DevopsCompile;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -21,7 +22,7 @@ public interface IDevopsCompileService extends IService<DevopsCompile> {
 
     Messages<?> autoCompile(String compileID);
 
-    Messages<?> stopCompile(DevopsCompile devopsCompile);
+    Result<?> stopCompile(DevopsCompile devopsCompile);
 
     List<DevopsServer> getServerIP(String serverStatus, String platform, String serverIp, String codeStatus);
 
@@ -50,4 +51,8 @@ public interface IDevopsCompileService extends IService<DevopsCompile> {
     void cancelCompile(String id, String compileStatus);
 
     void clearJenkins(String id);
+
+    Messages<?>  requestServer(String id);
+
+    DevopsServer getServerLinkIP(String serverIp);
 }

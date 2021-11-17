@@ -188,17 +188,14 @@ public class DevopsCompileController extends JeecgController<DevopsCompile, IDev
     @AutoLog(value = "编译任务-停止编译")
     @ApiOperation(value = "编译任务-停止编译", notes = "编译任务-停止编译")
     @PostMapping(value = "/stopCompile")
-    public Messages<?> stopCompile(HttpServletRequest request, @RequestBody DevopsCompile devopsCompile) {
+    public Result<?> stopCompile(HttpServletRequest request, @RequestBody DevopsCompile devopsCompile) {
         System.out.println("stop compile ... ");
-
-        Messages<?> messages;
         try {
-            messages = this.devopsCompileService.stopCompile(devopsCompile);
+           return this.devopsCompileService.stopCompile(devopsCompile);
         } catch (Exception e) {
             e.printStackTrace();
-            messages = Messages.Error(e.getMessage());
         }
-        return messages;
+        return Result.error("失败!");
     }
 
     /**
@@ -255,6 +252,20 @@ public class DevopsCompileController extends JeecgController<DevopsCompile, IDev
             return Result.error("未找到对应数据");
         }
         return Result.OK("成功");
+    }
+
+    /**
+     * 取消排队
+     *
+     * @param
+     * @return
+     */
+    @AutoLog(value = "请求服务器")
+    @ApiOperation(value = "请求服务器", notes = "请求服务器")
+    @GetMapping(value = "/requestServer")
+    public Result<?> requestServer(HttpServletRequest request, @RequestParam(name = "id", required = true) String id) {
+        Messages<?> messages =  devopsCompileService.requestServer(id);
+        return Result.OK(messages.getMsg(),"");
     }
 
 }

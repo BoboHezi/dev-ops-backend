@@ -1,15 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.jeecg.modules.devops.compile.mapper.DevopsCompileMapper">
-    <!-- 根据状态查询服务器含有当前项目 -->
-    <select id="queryServerStatus" parameterType="String" resultType="org.jeecg.modules.devops.server.entity.DevopsServer">
-        SELECT a.* FROM devops_server a inner join
-        devops_code b on a.id = b.code_server_id and
-        a.server_status = #{serverStatus}
-        and b.code_name = #{platform}
-        and b.code_status = #{codeStatus}
-        order by server_performance desc;
-    </select>
 
     <select id="queryCompile" parameterType="String" resultType="org.jeecg.modules.devops.compile.entity.DevopsCompile">
         SELECT * FROM devops_compile WHERE id = #{id};
@@ -60,50 +51,12 @@
         #{cherry_pick});
     </insert>
 
-
-    <!-- 根据状态查询服务器含有当前项目 -->
-    <select id="queryServerStatusAndIp" parameterType="String" resultType="org.jeecg.modules.devops.server.entity.DevopsServer">
-        SELECT a.* FROM devops_server a inner join
-        devops_code b on a.id = b.code_server_id
-        and a.server_status = #{serverStatus}
-        and a.server_ip = #{serverIp}
-        and b.code_name = #{platform}
-        and b.code_status = #{codeStatus} ;
-    </select>
-
-    <select id="queryServerCode" parameterType="String" resultType="org.jeecg.modules.devops.server.entity.DevopsServer">
-        SELECT a.* FROM devops_server a inner join
-        devops_code b on a.id = b.code_server_id
-        and a.server_status != 2
-        and a.server_status != 4
-        and b.code_name = #{platform}
-        and b.code_status = #{codeStatus} ;
-    </select>
-
-    <!-- 根据状态查询服务器含有当前项目 -->
-    <select id="queryServerCodeAndIp" parameterType="String" resultType="org.jeecg.modules.devops.server.entity.DevopsServer">
-        SELECT a.* FROM devops_server a inner join
-        devops_code b on a.id = b.code_server_id
-        and a.server_status != 2
-        and a.server_status != 4
-        and a.server_ip = #{serverIp}
-        and b.code_name = #{platform}
-        and b.code_status = #{codeStatus} ;
-    </select>
-
     <!-- 根据状态查询地址 -->
     <select id="queryCodeDir" parameterType="String" resultType="org.jeecg.modules.devops.code.entity.DevopsCode">
         SELECT * FROM devops_code
         WHERE code_server_id = #{serverId} and
         code_name = #{platform};
     </select>
-
-    <!-- 写入服务器状态 -->
-    <update id="updateServerStatus">
-        UPDATE devops_server
-        SET server_status =  #{serverStatus}
-        WHERE id = #{serverID};
-    </update>
 
     <!-- 写入服务器状态 -->
     <update id="updateCompileStatus">

@@ -37,8 +37,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.jeecg.common.aspect.annotation.AutoLog;
 
-import static org.jeecg.modules.devops.StatusCode.SERVER_STATUS_0;
-import static org.jeecg.modules.devops.StatusCode.SERVER_STATUS_2;
+import static org.jeecg.modules.devops.StatusCode.*;
 
 /**
  * @Description: 服务器表单
@@ -192,6 +191,62 @@ public class DevopsServerController extends JeecgController<DevopsServer, IDevop
         return Result.OK("成功");
     }
 
+    /**
+     * @param
+     * @return
+     */
+    @AutoLog(value = "断开连接服务器")
+    @ApiOperation(value = "断开连接服务器", notes = "断开连接服务器")
+    @GetMapping(value = "/breakRequestServer")
+    public Result<?> breakRequestServer(@RequestParam(name = "id", required = true) String id) {
+        devopsServerService.setStatusLinkServer(id, SERVER_STATUS_7,SERVER_LINK_STATUS_4,"",SERVER_LINK_TIME_START);
+        devopsServerService.setJenkinsLinkServer(id,true);
+        return Result.OK("成功");
+    }
+
+    /**
+     * @param
+     * @return
+     */
+    @AutoLog(value = "连接服务器")
+    @ApiOperation(value = "连接服务器", notes = "连接服务器")
+    @GetMapping(value = "/allowRequestServer")
+    public Result<?> allowRequestServer(@RequestParam(name = "id", required = true) String id) {
+        devopsServerService.setStatusLinkServer(id, SERVER_STATUS_7,SERVER_LINK_STATUS_3,"",SERVER_LINK_TIME_START);
+        devopsServerService.setJenkinsLinkServer(id,false);
+        return Result.OK("成功");
+    }
+
+    /**
+     * @param
+     * @return
+     */
+    @AutoLog(value = "拒绝请求服务器")
+    @ApiOperation(value = "拒绝请求服务器", notes = "拒绝请求服务器")
+    @GetMapping(value = "/refuseRequestServer")
+    public Result<?> refuseRequestServer(@RequestParam(name = "id", required = true) String id) {
+        devopsServerService.setStatusRefuseServer(id,SERVER_LINK_STATUS_1);
+        return Result.OK("成功");
+    }
+
+    /**
+     * @param
+     * @return
+     */
+    @AutoLog(value = "jenkins 请求接口")
+    @ApiOperation(value = "jenkins 请求接口", notes = "jenkins 请求接口")
+    @GetMapping(value = "/jenkinsRequestServer")
+    public Result<?> jenkinsRequestServer(@RequestParam(name = "id", required = true) String id,
+            @RequestParam(name = "status", required = true) String status,
+            @RequestParam(name = "ServerDir", required = true) String serverDir) {
+        if(status.equals(SERVER_LINK_STATUS_0)){
+            devopsServerService.setStatusLinkServer(id, SERVER_STATUS_7,SERVER_LINK_STATUS_0,serverDir,SERVER_LINK_TIME_END);
+        }else {
+            devopsServerService.setStatusLinkServer(id, SERVER_STATUS_0,SERVER_LINK_STATUS_1,serverDir,SERVER_LINK_TIME_START);
+        }
+        devopsServerService.sendServerEmail(id,status,serverDir);
+        return Result.OK("成功");
+    }
 
     /**
      * 导出excel

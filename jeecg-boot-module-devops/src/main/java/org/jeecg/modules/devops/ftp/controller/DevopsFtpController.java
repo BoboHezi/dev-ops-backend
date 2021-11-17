@@ -130,7 +130,25 @@ public class DevopsFtpController extends JeecgController<DevopsFtp, IDevopsFtpSe
 		return Result.OK(devopsFtp);
 	}
 
-    /**
+	 /**
+	  * 通过id查询
+	  *
+	  * @param id
+	  * @return
+	  */
+	 @AutoLog(value = "ftp列表-通过id查询")
+	 @ApiOperation(value="ftp列表-通过id查询", notes="ftp列表-通过id查询")
+	 @GetMapping(value = "/queryByIdAccount")
+	 public Result<?> queryByIdAccount(@RequestParam(name="id",required=true) String id) {
+		 DevopsFtp devopsFtp = devopsFtpService.getById(id);
+		 if(devopsFtp==null) {
+			 return Result.error("未找到对应数据");
+		 }
+		 return Result.OK(devopsFtp.getFtpUserName());
+	 }
+
+
+	 /**
     * 导出excel
     *
     * @param request

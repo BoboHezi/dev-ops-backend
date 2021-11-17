@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jeecg.modules.devops.cache.mapper.DevopsCompileCacheMapper">
+    <select id="queryCompileCache" parameterType="String" resultType="org.jeecg.modules.devops.cache.entity.DevopsCompileCache">
+        SELECT * FROM devops_compile_cache
+        WHERE devops_compile_id = #{id};
+    </select>
+    <select id="queryCompileAllCache" parameterType="String" resultType="org.jeecg.modules.devops.cache.entity.DevopsCompileCache">
+        SELECT * FROM devops_compile_cache;
+    </select>
+</mapper>

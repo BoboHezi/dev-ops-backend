@@ -2,9 +2,118 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.jeecg.modules.devops.server.mapper.DevopsServerMapper">
     <!-- 根据状态查询所有服务器 -->
-    <select id="queryServerStatus" parameterType="String" resultType="org.jeecg.modules.devops.server.entity.DevopsServer">
+    <select id="queryServerStatusAll" parameterType="String" resultType="org.jeecg.modules.devops.server.entity.DevopsServer">
         SELECT *
         FROM devops_server
-        WHERE server_status = #{status_free}
+        WHERE server_status = #{status}
     </select>
+
+    <!-- 根据状态查询所有服务器 -->
+    <select id="queryServerId" parameterType="String" resultType="org.jeecg.modules.devops.server.entity.DevopsServer">
+        SELECT *
+        FROM devops_server
+        WHERE id = #{id}
+    </select>
+
+    <!-- 根据状态查询所有服务器 -->
+    <select id="queryServerLinkStatus" parameterType="String" resultType="org.jeecg.modules.devops.server.entity.DevopsServer">
+        SELECT *
+        FROM devops_server
+        WHERE server_link_status = #{serverLinkStatus}
+    </select>
+
+    <!-- 写入服务器状态 -->
+    <update id="setServerLinkTime">
+        UPDATE devops_server
+        SET server_stop_link_time =  #{linkTime}
+        WHERE id = #{id};
+    </update>
+
+    <!-- 写入服务器状态 -->
+    <update id="updateServerStatus">
+        UPDATE devops_server
+        SET server_status =  #{serverStatus}
+        WHERE id = #{serverID};
+    </update>
+
+    <!-- 写入服务器状态 -->
+    <update id="updateServerLinkStatus">
+        UPDATE devops_server
+        SET server_status =  #{serverStatus},server_link_status = #{serverLinkStatus}, server_compile_url=#{serverDir}, server_stop_link_time=#{serverLinkTimeEnd}
+        WHERE id = #{serverID};
+    </update>
+
+    <!-- 写入服务器状态 -->
+    <update id="updateServerRefuseStatus">
+        UPDATE devops_server
+        SET server_compile_id = NULL,server_link_status = #{serverLinkStatus}
+        WHERE id = #{serverID};
+    </update>
+
+
+    <!-- 写入服务器状态 -->
+    <update id="updateRequestServer">
+        UPDATE devops_server
+        SET server_compile_id =  #{id},server_link_status = 2
+        WHERE server_ip = #{serverIp};
+    </update>
+
+    <!-- 根据状态查询服务器含有当前项目 -->
+    <select id="queryRequestServer" parameterType="String" resultType="org.jeecg.modules.devops.server.entity.DevopsServer">
+        SELECT * FROM devops_server
+        WHERE server_ip = #{serverIp} ;
+    </select>
+
+    <!-- 根据状态查询服务器含有当前项目 -->
+    <select id="queryServerStatus" parameterType="String" resultType="org.jeecg.modules.devops.server.entity.DevopsServer">
+        SELECT a.* FROM devops_server a inner join
+        devops_code b on a.id = b.code_server_id and
+        a.server_status = #{serverStatus}
+        and b.code_name = #{platform}
+        and b.code_status = #{codeStatus}
+        order by server_performance desc;
+    </select>
+
+    <!-- 根据状态查询服务器含有当前项目 -->
+    <select id="queryServerCodeAndIp" parameterType="String" resultType="org.jeecg.modules.devops.server.entity.DevopsServer">
+        SELECT a.* FROM devops_server a inner join
+        devops_code b on a.id = b.code_server_id
+        and a.server_status != 2
+        and a.server_status != 4
+        and a.server_ip = #{serverIp}
+        and b.code_name = #{platform}
+        and b.code_status = #{codeStatus} ;
+    </select>
+
+    <!-- 根据状态查询服务器含有当前项目 -->
+    <select id="queryServerStatusAndIp" parameterType="String" resultType="org.jeecg.modules.devops.server.entity.DevopsServer">
+        SELECT a.* FROM devops_server a inner join
+        devops_code b on a.id = b.code_server_id
+        and a.server_status = #{serverStatus}
+        and a.server_ip = #{serverIp}
+        and b.code_name = #{platform}
+        and b.code_status = #{codeStatus} ;
+    </select>
+
+    <select id="queryServerCode" parameterType="String" resultType="org.jeecg.modules.devops.server.entity.DevopsServer">
+        SELECT a.* FROM devops_server a inner join
+        devops_code b on a.id = b.code_server_id
+        and a.server_status != 2
+        and a.server_status != 4
+        and b.code_name = #{platform}
+        and b.code_status = #{codeStatus} ;
+    </select>
+
+    <!-- 根据状态查询服务器含有当前项目 -->
+    <select id="queryOtaServerStatus" parameterType="String" resultType="org.jeecg.modules.devops.server.entity.DevopsServer">
+        SELECT * FROM devops_server
+        WHERE server_use_flag = #{server_use_flag} and server_status = #{server_status};
+    </select>
+
+    <!-- 写入服务器状态 -->
+    <update id="updateServerPerformance">
+        UPDATE devops_server
+        SET server_performance =  #{performance}
+        WHERE id = #{id};
+    </update>
 </mapper>

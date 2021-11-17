@@ -90,4 +90,33 @@ public class DevopsServer implements Serializable {
 	@Excel(name = "存储剩余空间", width = 15)
     @ApiModelProperty(value = "存储剩余空间")
     private java.lang.String serverAvailableStorage;
+    /**请求连接服务器的状态*/
+    @Excel(name = "请求连接服务器的状态", width = 15)
+    @ApiModelProperty(value = "请求连接服务器的状态")
+    private java.lang.Integer serverLinkStatus;
+    /**请求服务器的编译id*/
+    @Excel(name = "请求服务器的编译id", width = 15)
+    @ApiModelProperty(value = "请求服务器的编译id")
+    private java.lang.String serverCompileId;
+    /**请求服务器地址*/
+    @Excel(name = "请求服务器地址", width = 15)
+    @ApiModelProperty(value = "请求服务器地址")
+    private java.lang.String serverCompileUrl;
+    /**停止连接的时间*/
+    @Excel(name = "停止连接的时间", width = 15)
+    @ApiModelProperty(value = "停止连接的时间")
+    private java.lang.Integer serverStopLinkTime;
+
+    /**初始服务器性能*/
+    @Excel(name = "初始服务器性能", width = 15)
+    @ApiModelProperty(value = "初始服务器性能")
+    private java.lang.Integer serverPerformanceInitialValue;
+    /**最低服务器性能*/
+    @Excel(name = "最低服务器性能", width = 15)
+    @ApiModelProperty(value = "最低服务器性能")
+    private java.lang.Integer serverPerformanceLowValue;
+    /**服务器用途*/
+    @Excel(name = "服务器用途", width = 15)
+    @ApiModelProperty(value = "服务器用途")
+    private java.lang.String serverUseFlag;
 }
