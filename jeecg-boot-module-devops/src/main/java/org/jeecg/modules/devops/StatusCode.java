@@ -2,7 +2,7 @@ package org.jeecg.modules.devops;
 
 public class StatusCode {
     /**
-     * SERVER_STATUS 服务器 状态 0 空闲, 1 占用, 2 关机, 3 编译前占有该数据库, 4 报废, 5 重启服务器中 , 6 未知
+     * SERVER_STATUS 服务器 状态 0 空闲, 1 占用, 2 关机, 3 编译前占有该数据库, 4 报废, 5 重启服务器中 , 6 未知 ,7 调试代码
      */
     public final static String SERVER_STATUS_0 = "0";
     public final static String SERVER_STATUS_1 = "1";

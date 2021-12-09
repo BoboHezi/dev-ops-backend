@@ -149,6 +149,7 @@ public class DevopsServerServiceImpl extends ServiceImpl<DevopsServerMapper, Dev
            XLog.debug("devopsServers"+devopsServer.toString());
            if(devopsServer.getServerStopLinkTime() <= SERVER_LINK_TIME_START){
                setStatusLinkServer(devopsServer.getId(), SERVER_STATUS_7,SERVER_LINK_STATUS_4,"", SERVER_LINK_TIME_START);
+               setStatusRefuseServer(devopsServer.getId(),SERVER_LINK_STATUS_1);
                setJenkinsLinkServer(devopsServer.getId(),true);
            } else {
               devopsServerMapper.setServerLinkTime(devopsServer.getId(),devopsServer.getServerStopLinkTime()-1);

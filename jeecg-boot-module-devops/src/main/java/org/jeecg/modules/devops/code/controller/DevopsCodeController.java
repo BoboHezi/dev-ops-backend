@@ -177,18 +177,15 @@ public class DevopsCodeController extends JeecgController<DevopsCode, IDevopsCod
 	  */
 	 @AutoLog(value = "源代码管理-同步代码")
 	 @ApiOperation(value = "源代码管理-同步代码", notes = "源代码管理-同步代码")
-	 @PostMapping(value = "/syncCode")
-	 public Messages<?> syncCode(HttpServletRequest request, @RequestBody DevopsCode devopsCode) {
-		 System.out.println("sync code ... ");
-
-		 Messages<?> messages;
-		 try {
-			 messages = this.devopsCodeService.syncCode(devopsCode);
+	 @GetMapping(value = "/syncCode")
+	 public Result<?> syncCode(@RequestParam(name="id",required=true) String id) {
+	 	try {
+			 this.devopsCodeService.syncCode(id);
 		 } catch (Exception e) {
 			 e.printStackTrace();
-			 messages = Messages.Error(e.getMessage());
+			 return Result.error("失败");
 		 }
-		 return messages;
+		 return Result.OK("成功");
 	 }
 
 }

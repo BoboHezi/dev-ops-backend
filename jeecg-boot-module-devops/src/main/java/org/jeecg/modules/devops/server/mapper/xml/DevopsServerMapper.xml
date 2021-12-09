@@ -39,7 +39,8 @@
     <!-- 写入服务器状态 -->
     <update id="updateServerLinkStatus">
         UPDATE devops_server
-        SET server_status =  #{serverStatus},server_link_status = #{serverLinkStatus}, server_compile_url=#{serverDir}, server_stop_link_time=#{serverLinkTimeEnd}
+        SET server_status =  #{serverStatus},server_link_status = #{serverLinkStatus}, server_compile_url=#{serverDir},
+        server_stop_link_time=#{serverLinkTimeEnd}
         WHERE id = #{serverID};
     </update>
 

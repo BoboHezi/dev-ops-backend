@@ -19,7 +19,7 @@ public enum MessagesEnum {
     LINK_SERVER_FAILED("服务器创建连接失败","服务器创建连接失败,请联系管理员，重新重试一下"),
     LINK_SERVER_CONTEXT("服务器连接地址: %s<br>服务器连接时间为8小时,用完记得提醒管理员,保证资源利用"),
     MESSAGE_HEADER("HI %s:<br><br><br>"),
-    MESSAGE_END("<br><br>有任何疑问,请咨询Droi.<br>多谢！<br>web网页<br>http://192.168.48.2:8081"),
+    MESSAGE_END("<br><br>有任何疑问,请咨询Droi.<br>多谢！<br>web网页<br>http://192.168.48.113"),
     MESSAGE_NOTES("<br>注意事项"),
     OTA_CHECK_FAIL("参数错误","参数填写有问题，请重新检查一遍，重新制作"),
     OTA_DOWNLOAD_FAIL("下载target包失败","下载target升级包失败，请检查对应的账号，ftp地址是否存在问题"),

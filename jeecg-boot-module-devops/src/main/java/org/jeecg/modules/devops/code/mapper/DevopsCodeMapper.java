@@ -2,9 +2,9 @@ package org.jeecg.modules.devops.code.mapper;
 
 import java.util.List;
 
-import org.apache.ibatis.annotations.Param;
 import org.jeecg.modules.devops.code.entity.DevopsCode;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.springframework.data.repository.query.Param;
 
 /**
  * @Description: 源代码管理
@@ -13,5 +13,10 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @Version: V1.0
  */
 public interface DevopsCodeMapper extends BaseMapper<DevopsCode> {
+    /**
+     * 更新数据库
+     * * @return
+     */
+    public void SyncCode(@Param("status") String id, String status);
 
 }

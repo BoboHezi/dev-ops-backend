@@ -12,5 +12,5 @@ import org.jeecg.modules.devops.entity.Messages;
  */
 public interface IDevopsCodeService extends IService<DevopsCode> {
 
-    Messages<?> syncCode(DevopsCode devopsCode);
+    String syncCode(String codeId);
 }

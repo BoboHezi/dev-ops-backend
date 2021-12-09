@@ -2,4 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.jeecg.modules.devops.code.mapper.DevopsCodeMapper">
 
+    <!-- 根据id 查服务器密码 -->
+    <update id="SyncCode" parameterType="String">
+        UPDATE devops_code
+        SET code_status =  #{status}
+        WHERE id = #{id};
+    </update>
+
 </mapper>

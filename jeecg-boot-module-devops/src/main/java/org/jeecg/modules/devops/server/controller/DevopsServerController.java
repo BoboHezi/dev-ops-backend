@@ -200,6 +200,7 @@ public class DevopsServerController extends JeecgController<DevopsServer, IDevop
     @GetMapping(value = "/breakRequestServer")
     public Result<?> breakRequestServer(@RequestParam(name = "id", required = true) String id) {
         devopsServerService.setStatusLinkServer(id, SERVER_STATUS_7,SERVER_LINK_STATUS_4,"",SERVER_LINK_TIME_START);
+        devopsServerService.setStatusRefuseServer(id,SERVER_LINK_STATUS_1);
         devopsServerService.setJenkinsLinkServer(id,true);
         return Result.OK("成功");
     }
