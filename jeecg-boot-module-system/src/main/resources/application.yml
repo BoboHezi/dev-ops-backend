@@ -2,7 +2,7 @@ spring:
   application:
     name: jeecg-system
   profiles:
-    active: dev
+    active: prod
 
 config:
 #  jenkins_username: admin
@@ -12,8 +12,8 @@ config:
 
   jenkins_username: admin
   jenkins_username_pwd: admin
-  jenkins_token: 11dc9281f119ef20ebd89685f7b97e07e1
-  jenkins_url: 192.168.151.238:8080/
+  jenkins_token: 11ce76a40837300af8681ca76b958ccdac
+  jenkins_url: 192.168.49.21:8083/
 
   mail:
     host: smtp.263.net
